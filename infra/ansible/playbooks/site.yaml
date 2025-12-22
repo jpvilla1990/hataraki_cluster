@@ -1,0 +1,14 @@
+- hosts: all
+  become: yes
+  roles:
+    - common
+
+- hosts: control_plane
+  become: yes
+  roles:
+    - control_plane
+
+- hosts: workers
+  become: yes
+  roles:
+    - worker

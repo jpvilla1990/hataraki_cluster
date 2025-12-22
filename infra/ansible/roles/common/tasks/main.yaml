@@ -1,0 +1,46 @@
+#- name: Update packages
+#  apt:
+#    update_cache: yes
+#    upgrade: dist
+#  when: ansible_os_family == "Debian"
+
+#- name: Disable swap
+#  command: swapoff -a
+#  when: ansible_swaptotal_mb > 0
+
+#- name: Remove swap from fstab
+#  replace:
+#    path: /etc/fstab
+#    regexp: '^([^#].*swap.*)$'
+#    replace: '# \1'
+
+#- name: Load kernel modules
+#  modprobe:
+#    name: br_netfilter
+
+- name: iptables setup
+  include_tasks: iptables.yml
+
+- name: cgroup setup
+  include_tasks: cgroup.yml
+
+- name: containerd setup
+  include_tasks: containerd.yml
+
+- name: check systemd or cgroupfs
+  command: ps -p 1 -o comm=
+  register: cgroup_output
+
+- name: Setup kubelet with systemd cgroup driver
+  command: echo "System uses systemd"
+  when: cgroup_output.stdout | trim == "systemd"
+
+- name: Setup containerd with systemd cgroup driver
+  command: echo "System uses systemd"
+  when: cgroup_output.stdout | trim == "systemd"
+
+# TODO: set cgroup driver based on output
+#apiVersion: kubelet.config.k8s.io/v1beta1
+#kind: KubeletConfiguration
+#...
+#cgroupDriver: systemd
