@@ -1,0 +1,10 @@
+- name: Ensure known_hosts file exists
+  file:
+    path: "{{ known_hosts_file }}"
+    state: touch
+    mode: '0600'
+
+- name: Scan all hosts and append to known_hosts
+  shell: |
+    ssh-keyscan -H {{ hostvars[item]['ansible_host'] }} >> {{ known_hosts_file }}
+  loop: "{{ groups['all'] }}"

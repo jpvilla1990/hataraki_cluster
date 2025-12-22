@@ -19,25 +19,13 @@
 #    name: br_netfilter
 
 - name: iptables setup
-  include_tasks: iptables.yml
+  include_tasks: iptables.yaml
 
 - name: cgroup setup
-  include_tasks: cgroup.yml
+  include_tasks: cgroup.yaml
 
 - name: containerd setup
-  include_tasks: containerd.yml
-
-- name: check systemd or cgroupfs
-  command: ps -p 1 -o comm=
-  register: cgroup_output
-
-- name: Setup kubelet with systemd cgroup driver
-  command: echo "System uses systemd"
-  when: cgroup_output.stdout | trim == "systemd"
-
-- name: Setup containerd with systemd cgroup driver
-  command: echo "System uses systemd"
-  when: cgroup_output.stdout | trim == "systemd"
+  include_tasks: containerd.yaml
 
 # TODO: set cgroup driver based on output
 #apiVersion: kubelet.config.k8s.io/v1beta1
