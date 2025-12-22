@@ -1,0 +1,2 @@
+# Ignore nodes, to be populated by automation
+infra/ansible/inventories/**/hosts.yaml
