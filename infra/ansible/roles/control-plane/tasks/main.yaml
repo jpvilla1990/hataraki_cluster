@@ -1,17 +1,2 @@
-- name: Install k3s control plane
-  shell: |
-    curl -sfL https://get.k3s.io | \
-    INSTALL_K3S_EXEC="server \
-    --cluster-init \
-    --write-kubeconfig-mode=644" sh -
-  args:
-    creates: /etc/rancher/k3s/k3s.yaml
-
-- name: Fetch node token
-  slurp:
-    src: /var/lib/rancher/k3s/server/node-token
-  register: node_token
-
-- name: Set join token fact
-  set_fact:
-    k3s_node_token: "{{ node_token.content | b64decode | trim }}"
+- name: setup cluster
+  include_tasks: setup_cluster.yaml

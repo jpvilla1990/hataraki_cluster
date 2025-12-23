@@ -1,0 +1,9 @@
+- name: Initialize Kubernetes control plane (without CNI)
+  command: >
+    kubeadm init
+    --control-plane-endpoint {{ control_plane_endpoint }}
+    --cri-socket {{ cri_socket }}
+    --upload-certs
+  args:
+    creates: "{{ kubeadm_config_path }}"
+  register: kubeadm_init

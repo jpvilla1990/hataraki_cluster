@@ -1,0 +1,3 @@
+control_plane_endpoint: "hatarakiassistant.com:6443"
+cri_socket: "unix:///run/containerd/containerd.sock"
+kubeadm_config_path: /etc/kubernetes/admin.conf
