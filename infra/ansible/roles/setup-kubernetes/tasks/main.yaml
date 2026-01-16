@@ -1,0 +1,8 @@
+- name: CNI
+  include_tasks: cni.yaml
+
+- name: Enable workers
+  include_tasks: enable_workers.yaml
+
+- name: Metrics server
+  include_tasks: metrics.yaml

@@ -1,0 +1,4 @@
+control_plane_endpoint: hatarakiassistant.com
+control_plane_port: 6443
+cri_socket: unix:///run/containerd/containerd.sock
+kubeadm_config_path: /etc/kubernetes/admin.conf

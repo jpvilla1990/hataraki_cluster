@@ -1,0 +1,11 @@
+- name: Install metrics server
+  command: kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+- name: Patch Metrics Server to skip TLS verification
+  command: |
+    kubectl patch deployment metrics-server -n kube-system --type='json' -p='[
+      {"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--kubelet-insecure-tls"}
+    ]'
+    
+- name: Wait for Metrics Server to restart
+  command: kubectl rollout status deployment/metrics-server -n kube-system --timeout=120s

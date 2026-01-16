@@ -13,12 +13,12 @@
 #   limitations under the License.
 
 # Configure cgroup in containerd
-[plugins.'io.containerd.{{ containerd_plugin_suffix }}'.containerd.runtimes.runc]
-  [plugins.'io.containerd.{{ containerd_plugin_suffix }}'.containerd.runtimes.runc.options]
+[plugins.'io.containerd.grpc.v1.cri'.containerd.runtimes.runc]
+  [plugins.'io.containerd.grpc.v1.cri'.containerd.runtimes.runc.options]
     SystemdCgroup = true
 
 # Sandbox pause docker image
-[plugins.'io.containerd.{{ containerd_plugin_suffix }}']
+[plugins.'io.containerd.grpc.v1.cri']
   sandbox_image = "registry.k8s.io/pause:3.10"
 
 # Ensure CRI is not disabled

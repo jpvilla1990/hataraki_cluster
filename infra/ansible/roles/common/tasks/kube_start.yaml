@@ -1,6 +1,12 @@
-- name: Enable and restart kubelet service
+- name: Enable kubelet service (do not start or restart)
   systemd:
     name: kubelet
     enabled: yes
-    state: restarted
     daemon_reload: yes
+
+- name: Set system-wide environment variable
+  lineinfile:
+    path: /etc/environment
+    line: 'KUBECONFIG="/etc/kubernetes/admin.conf"'
+    state: present
+  become: true

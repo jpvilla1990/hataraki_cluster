@@ -1,0 +1,2 @@
+- name: setup cluster worker
+  include_tasks: setup_worker_cluster.yaml

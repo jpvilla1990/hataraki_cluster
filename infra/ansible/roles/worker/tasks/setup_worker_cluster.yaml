@@ -1,0 +1,15 @@
+- name: Check if worker is already initialized
+  stat:
+    path: /etc/kubernetes/kubelet.conf
+  register: worker_conf
+
+- name: Decide worker role
+  set_fact:
+    cp_action: "{{ 'skip' if worker_conf.stat.exists else 'join' }}"
+- debug:
+    msg: "Worker action: {{ cp_action }}"
+
+- name: Join control plane
+  command: "{{ hostvars[groups['first-control-plane'][0]].kubeadm_node_join_command }}"
+  when: cp_action == "join"
+

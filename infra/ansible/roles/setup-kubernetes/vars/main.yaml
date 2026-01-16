@@ -1,0 +1,2 @@
+cilium_url: https://raw.githubusercontent.com/cilium/cilium-cli/main/stable.txt
+version: 1.18.6

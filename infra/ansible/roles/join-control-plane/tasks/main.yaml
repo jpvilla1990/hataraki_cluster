@@ -1,0 +1,2 @@
+- name: setup cluster
+  include_tasks: setup_join_cluster.yaml

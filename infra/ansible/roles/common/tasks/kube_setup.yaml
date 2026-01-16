@@ -17,9 +17,7 @@
     group: root
 
 - name: Download Kubernetes GPG key and dearmor
-  ansible.builtin.command: >
-    curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.35/deb/Release.key
-    | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+  shell: curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.35/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
   args:
     creates: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
@@ -34,20 +32,36 @@
 - name: Update apt cache
   apt:
     update_cache: yes
-    cache_valid_time: 3600
 
 - name: Install Kubernetes packages
   apt:
     name: "{{ kube_packages }}"
     state: present
 
-- name: Configure kubelet to tolerate swap
-  lineinfile:
-    path: /etc/default/kubelet
-    regexp: '^KUBELET_EXTRA_ARGS="?(.*)"?$'
-    line: 'KUBELET_EXTRA_ARGS="\1 --fail-swap-on=false"'
-    backrefs: yes
-    create: yes
+- name: check systemd or cgroupfs
+  command: ps -p 1 -o comm=
+  register: cgroup_output
+
+- name: Setup kubelet with systemd cgroup driver
+  command: echo "System uses systemd"
+  when: cgroup_output.stdout | trim == "systemd"
+
+- name: Configure kubelet extra args
+  copy:
+    dest: /etc/default/kubelet
+    content: |
+      KUBELET_EXTRA_ARGS="--cgroup-driver=systemd --fail-swap-on=false"
     owner: root
     group: root
     mode: '0644'
+  when: cgroup_output.stdout | trim == "systemd"
+
+- name: Configure kubelet extra args
+  copy:
+    dest: /etc/default/kubelet
+    content: |
+      KUBELET_EXTRA_ARGS="--cgroup-driver=cgroupfs --fail-swap-on=false"
+    owner: root
+    group: root
+    mode: '0644'
+  when: cgroup_output.stdout | trim == "cgroupfs"

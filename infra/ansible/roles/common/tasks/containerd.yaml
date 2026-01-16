@@ -49,12 +49,17 @@
 
 - name: Set systemd_cgroup variable based on rev output
   set_fact:
-    containerd_plugin_suffix: "{{ 'grpc.v1.cri' if 'v1.' in containerd_version.stdout else 'cri.v1.runtime' }}"
+    containerd_version_var: "{{ '1' if 'v1.' in containerd_version.stdout else '2' }}"
 
 - name: Deploy containerd config from template
   template:
-    src: containerd_config_template.toml
+    src: containerd_config_{{ containerd_version_var }}_template.toml
     dest: "{{ containerd_config }}"
     owner: root
     group: root
     mode: '0644'
+
+- name: Restart containerd to apply new configuration
+  systemd:
+    name: containerd
+    state: restarted

@@ -1,0 +1,51 @@
+- name: Get latest Cilium CLI version
+  uri:
+    url: "{{ cilium_url }}"
+    return_content: yes
+  register: cilium_version
+
+- name: Set facts for Cilium installation
+  set_fact:
+    cilium_cli_version: "{{ cilium_version.content | trim }}"
+    cli_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
+
+- name: Download and verify Cilium CLI
+  block:
+    - name: Download Cilium CLI binary and checksum
+      get_url:
+        url: "{{ item.url }}"
+        dest: "{{ item.dest }}"
+        mode: '0644'
+      loop:
+        - url: "https://github.com/cilium/cilium-cli/releases/download/{{ cilium_cli_version }}/cilium-linux-{{ cli_arch }}.tar.gz"
+          dest: "/tmp/cilium-linux-{{ cli_arch }}.tar.gz"
+        - url: "https://github.com/cilium/cilium-cli/releases/download/{{ cilium_cli_version }}/cilium-linux-{{ cli_arch }}.tar.gz.sha256sum"
+          dest: "/tmp/cilium-linux-{{ cli_arch }}.tar.gz.sha256sum"
+    
+    - name: Verify checksum
+      shell: |
+        cd /tmp && sha256sum --check cilium-linux-{{ cli_arch }}.tar.gz.sha256sum
+      changed_when: false
+    
+    - name: Extract Cilium CLI
+      unarchive:
+        src: "/tmp/cilium-linux-{{ cli_arch }}.tar.gz"
+        dest: /usr/local/bin
+        remote_src: yes
+        mode: '0755'
+
+  always:
+    - name: Clean up temporary files
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "/tmp/cilium-linux-{{ cli_arch }}.tar.gz"
+        - "/tmp/cilium-linux-{{ cli_arch }}.tar.gz.sha256sum"
+
+- name: Install Cilium CNI
+  command: >
+    cilium install
+    --version {{ version }}
+  args:
+    creates: /etc/cni/net.d/10-cilium.conflist

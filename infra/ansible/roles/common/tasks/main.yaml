@@ -7,8 +7,5 @@
 - name: setup kubeadm, kubelet and kubectl
   include_tasks: kube_setup.yaml
 
-- name: cgroup setup
-  include_tasks: cgroup.yaml
-
 - name: start kubeadm, kubelet and kubectl
   include_tasks: kube_start.yaml

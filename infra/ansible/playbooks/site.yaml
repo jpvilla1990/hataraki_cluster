@@ -9,12 +9,22 @@
   roles:
     - common
 
-- hosts: control-plane
+- hosts: first-control-plane
   become: yes
   roles:
-    - control-plane
+    - first-control-plane
+
+- hosts: join-control-plane
+  become: yes
+  roles:
+    - join-control-plane
 
 - hosts: workers
   become: yes
   roles:
     - worker
+
+- hosts: first-control-plane
+  become: yes
+  roles:
+    - setup-kubernetes

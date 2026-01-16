@@ -1,0 +1,93 @@
+- name: Check if control plane is already initialized
+  stat:
+    path: /etc/kubernetes/admin.conf
+  register: admin_conf
+
+- name: Decide first-control-plane role
+  set_fact:
+    cp_action: "{{ 'skip' if admin_conf.stat.exists else 'init' }}"
+
+- debug:
+    msg: "Control-plane action: {{ cp_action }}"
+
+- name: Stop kubelet before kubeadm operations
+  systemd:
+    name: kubelet
+    state: stopped
+  when: cp_action == "init"
+
+- name: Reset kubeadm to clean stale state
+  command: kubeadm reset -f
+  when: cp_action == "init"
+
+- name: Remove leftover Kubernetes directories
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /etc/kubernetes
+    - /var/lib/etcd
+    - /var/lib/kubelet
+  when: cp_action == "init"
+  ignore_errors: yes
+
+- name: Initialize first control plane
+  command: >
+    kubeadm init
+    --control-plane-endpoint {{ control_plane_endpoint }}:{{ control_plane_port }}
+    --cri-socket {{ cri_socket }}
+    --upload-certs
+  when: cp_action == "init"
+
+- name: Get control-plane join command
+  command: kubeadm token create --print-join-command
+  register: join_cmd
+
+- name: Get certificate key
+  command: kubeadm init phase upload-certs --upload-certs
+  register: cert_key
+
+- name: Set join nodes facts globally
+  set_fact:
+    kubeadm_node_join_command: "{{ join_cmd.stdout }}"
+
+- name: Set join control plane facts globally
+  set_fact:
+    kubeadm_control_plane_join_command: "{{ join_cmd.stdout }} --control-plane --certificate-key {{ cert_key.stdout_lines[-1] }}"
+
+- debug:
+    msg: "Join command: {{ join_cmd }}"
+
+- debug:
+    msg: "certificate: {{ cert_key }}"
+
+- name: Start kubelet after cleanup
+  systemd:
+    name: kubelet
+    state: started
+    enabled: yes
+  when: cp_action == "init"
+
+- name: Ensure .kube directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.kube"
+    state: directory
+    mode: '0700'
+
+- name: Copy admin kubeconfig to user home
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: "{{ ansible_env.HOME }}/.kube/config"
+    owner: "{{ ansible_user_uid | default(ansible_uid) }}"
+    group: "{{ ansible_user_gid | default(ansible_gid) }}"
+    mode: '0600'
+    remote_src: true
+
+- name: Read kubeconfig content
+  slurp:
+    src: "{{ ansible_env.HOME }}/.kube/config"
+  register: kubeconfig_raw
+
+- name: Set kubeconfig as fact
+  set_fact:
+    kubeconfig_content: "{{ kubeconfig_raw.content | b64decode }}"
