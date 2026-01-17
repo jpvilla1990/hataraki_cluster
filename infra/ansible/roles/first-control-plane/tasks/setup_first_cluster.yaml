@@ -64,8 +64,7 @@
 - name: Start kubelet after cleanup
   systemd:
     name: kubelet
-    state: started
-    enabled: yes
+    state: restarted
   when: cp_action == "init"
 
 - name: Ensure .kube directory exists

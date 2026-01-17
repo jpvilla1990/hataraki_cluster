@@ -1,0 +1,24 @@
+- name: Add Helm GPG key
+  shell: |
+    curl -fsSL https://packages.buildkite.com/helm-linux/helm-debian/gpgkey \
+    | gpg --dearmor \
+    | tee /usr/share/keyrings/helm.gpg > /dev/null
+  args:
+    creates: /usr/share/keyrings/helm.gpg
+
+- name: Add Helm apt repository
+  copy:
+    dest: /etc/apt/sources.list.d/helm.list
+    content: "deb [signed-by=/usr/share/keyrings/helm.gpg] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main"
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install Helm
+  apt:
+    name: helm
+    state: present

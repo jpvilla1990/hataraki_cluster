@@ -4,6 +4,7 @@ kube_dependencies:
   - ca-certificates
   - curl
   - gpg
+  - net-tools
 
 kube_version: "1.35"
 

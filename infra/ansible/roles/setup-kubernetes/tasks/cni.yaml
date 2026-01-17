@@ -43,9 +43,18 @@
         - "/tmp/cilium-linux-{{ cli_arch }}.tar.gz"
         - "/tmp/cilium-linux-{{ cli_arch }}.tar.gz.sha256sum"
 
-- name: Install Cilium CNI
+- name: Check if Cilium is already installed
+  command: cilium status --wait=false
+  register: cilium_status
+  failed_when: false
+  changed_when: false
+
+- name: Install Cilium CNI and External Load Balancer
   command: >
     cilium install
     --version {{ version }}
-  args:
-    creates: /etc/cni/net.d/10-cilium.conflist
+    --set ipam.operator.clusterPoolIPv4PodCIDRList="{192.168.0.0/16}"
+    --set ipv4NativeRoutingCIDR={{ ipv4_private_network }}
+    --set loadBalancer.acceleration=native
+    --set loadBalancer.mode=dsr
+  when: cilium_status.rc != 0

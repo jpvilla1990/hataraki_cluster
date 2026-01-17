@@ -50,7 +50,7 @@
   copy:
     dest: /etc/default/kubelet
     content: |
-      KUBELET_EXTRA_ARGS="--cgroup-driver=systemd --fail-swap-on=false"
+      KUBELET_EXTRA_ARGS="--cgroup-driver=systemd --fail-swap-on=false --node-ip={{ hostvars[inventory_hostname]['private_ip'] }}"
     owner: root
     group: root
     mode: '0644'
@@ -60,7 +60,7 @@
   copy:
     dest: /etc/default/kubelet
     content: |
-      KUBELET_EXTRA_ARGS="--cgroup-driver=cgroupfs --fail-swap-on=false"
+      KUBELET_EXTRA_ARGS="--cgroup-driver=cgroupfs --fail-swap-on=false --node-ip={{ hostvars[inventory_hostname]['private_ip'] }}"
     owner: root
     group: root
     mode: '0644'

@@ -1,3 +1,6 @@
+- name: helm setup
+  include_tasks: helm.yaml
+
 - name: CNI
   include_tasks: cni.yaml
 

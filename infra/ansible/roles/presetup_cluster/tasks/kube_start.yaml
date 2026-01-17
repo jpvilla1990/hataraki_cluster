@@ -1,8 +1,7 @@
-- name: Enable kubelet service (do not start or restart)
+- name: Enable kubelet restart
   systemd:
     name: kubelet
-    enabled: yes
-    daemon_reload: yes
+    state: restarted
 
 - name: Set system-wide environment variable
   lineinfile:
