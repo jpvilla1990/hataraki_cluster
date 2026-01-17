@@ -20,7 +20,7 @@ spec:
       - name: hello
         image: hashicorp/http-echo
         args:
-          - "-text=Hello from Traefik Gateway! 🚀"
+          - "-text=Hello to hataraki assistant! 🚀"
           - "-listen=:8080"
         ports:
         - containerPort: 8080
@@ -58,16 +58,3 @@ spec:
     backendRefs:
     - name: hello-app
       port: 80
----
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: hello-tls
-  namespace: default
-spec:
-  secretName: hello-tls-secret
-  dnsNames:
-    - test.hatarakiassistant.com
-  issuerRef:
-    name: letsencrypt-prod
-    kind: ClusterIssuer

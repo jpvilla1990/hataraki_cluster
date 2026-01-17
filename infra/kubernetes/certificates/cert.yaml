@@ -6,10 +6,23 @@ metadata:
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
-    email: jpvilla1990@gmail.com  # Change this to your actual email
+    email: email@something.com
     privateKeySecretRef:
       name: letsencrypt-prod
     solvers:
     - http01:
         ingress:
-          class: traefik  # Changed from nginx to traefik
+          class: traefik
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: tls-secret
+  namespace: traefik
+spec:
+  secretName: tls-secret
+  dnsNames:
+    - test.hatarakiassistant.com
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
