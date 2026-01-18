@@ -1,16 +1,13 @@
 # hataraki_cluster
 
-## Flux Setup Instructions
+## Setup Instructions
 
-5. **Bootstrap Flux** (from your Ansible or manually):
-   ```bash
-   flux bootstrap github \
-     --owner=<your-github-username> \
-     --repository=k8s-gitops \
-     --branch=main \
-     --path=clusters/production \
-     --personal
-   ```
+Populate `infra/ansible/inventories/prod/hosts.yaml` file, then roll out cluster with ansible
+
+```bash
+cd infra/ansible
+ansible-playbook playbooks/site.yaml
+```
 
 6. **Verify deployment:**
    ```bash
