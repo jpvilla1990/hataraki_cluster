@@ -31,6 +31,11 @@
         - notification-controller
     EOF
 
+- name: Scan GitHub SSH host key
+  command: ssh-keyscan github.com
+  register: github_ssh_scan
+  changed_when: false
+
 - name: Create Flux GitHub SSH secret
   shell: |
     kubectl apply -f - <<'EOF'
@@ -42,6 +47,7 @@
     type: Opaque
     data:
       identity: {{ flux_github_ssh_key | b64encode }}
+      known_hosts: {{ github_ssh_scan.stdout | b64encode }}
     EOF
 
 - name: Create Flux GitRepository
@@ -71,7 +77,7 @@
       namespace: flux-system
     spec:
       interval: 5m
-      path: ./kube
+      path: ./infra/kube
       prune: true
       wait: true
       sourceRef:
