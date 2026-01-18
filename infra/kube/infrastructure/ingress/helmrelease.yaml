@@ -1,0 +1,41 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: traefik
+  namespace: traefik
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: traefik
+      version: '38.0.2'  # or use '*' for latest
+      sourceRef:
+        kind: HelmRepository
+        name: traefik
+        namespace: flux-system
+      interval: 1m
+  install:
+    createNamespace: true
+  values:
+    providers:
+      kubernetesGateway:
+        enabled: true
+    service:
+      type: LoadBalancer
+    gateway:
+      listeners:
+        web:
+          port: 8000
+          protocol: HTTP
+          namespacePolicy:
+            from: All
+        websecure:
+          port: 8443
+          protocol: HTTPS
+          namespacePolicy:
+            from: All
+          certificateRefs:
+          - kind: Secret
+            name: tls-secret
+            namespace: traefik
+          mode: Terminate

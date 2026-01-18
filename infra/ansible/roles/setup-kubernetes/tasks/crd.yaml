@@ -1,0 +1,19 @@
+- name: Check if cert-manager namespace exists
+  command: kubectl get namespace cert-manager
+  register: certmanager_check
+  failed_when: false
+  changed_when: false
+
+- name: Apply cert-manager manifest
+  command: kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.14.0/cert-manager.yaml
+  when: certmanager_check.rc != 0
+
+- name: Check if Gateway API CRDs are installed
+  command: kubectl get GatewayClass
+  register: gatewayapi_check
+  failed_when: false
+  changed_when: false
+
+- name: Apply Gateway API CRDs
+  command: kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/standard-install.yaml 
+  when: gatewayapi_check.rc != 0
