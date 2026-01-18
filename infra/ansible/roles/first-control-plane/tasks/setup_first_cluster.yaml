@@ -55,12 +55,6 @@
   set_fact:
     kubeadm_control_plane_join_command: "{{ join_cmd.stdout }} --control-plane --certificate-key {{ cert_key.stdout_lines[-1] }}"
 
-- debug:
-    msg: "Join command: {{ join_cmd }}"
-
-- debug:
-    msg: "certificate: {{ cert_key }}"
-
 - name: Start kubelet after cleanup
   systemd:
     name: kubelet
