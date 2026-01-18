@@ -7,9 +7,6 @@
   set_fact:
     cp_action: "{{ 'skip' if admin_conf.stat.exists else 'init' }}"
 
-- debug:
-    msg: "Control-plane action: {{ cp_action }}"
-
 - name: Stop kubelet before kubeadm operations
   systemd:
     name: kubelet
