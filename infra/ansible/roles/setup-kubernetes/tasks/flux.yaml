@@ -41,7 +41,7 @@
       namespace: flux-system
     type: kubernetes.io/ssh-auth
     data:
-      ssh-privatekey: {{ flux_github_ssh_key_b64 }}
+      ssh-privatekey: {{ flux_github_ssh_key | b64encode }}
     EOF
 
 - name: Create Flux GitRepository
