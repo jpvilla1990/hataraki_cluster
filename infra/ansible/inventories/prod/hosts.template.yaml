@@ -10,7 +10,7 @@ all:
           -----BEGIN OPENSSH PRIVATE KEY-----
           ....
           -----END OPENSSH PRIVATE KEY-----
-        github_repo: ssh_url_repo
+        github_repo: github_owner/github_repo.git
         github_branch: main
     join-control-plane: # Add if exists, otherwise comment out
       hosts:

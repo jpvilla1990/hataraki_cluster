@@ -54,7 +54,7 @@
       namespace: flux-system
     spec:
       interval: 1m
-      url: {{ github_repo }}
+      url: ssh://git@github.com/{{ github_repo }}
       ref:
         branch: {{ github_branch }}
       secretRef:
