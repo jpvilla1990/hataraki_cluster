@@ -9,3 +9,6 @@
 
 - name: Metrics server
   include_tasks: metrics.yaml
+
+- name: Flux installation
+  include_tasks: flux.yaml

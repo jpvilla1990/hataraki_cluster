@@ -1,0 +1,27 @@
+all:
+  children:
+    first-control-plane:
+      hosts:
+        vmd140544:
+          ansible_host: public_ip
+          private_ip: private_ip
+      vars:
+        flux_github_ssh_key_b64: |
+          -----BEGIN OPENSSH PRIVATE KEY-----
+          ....
+          -----END OPENSSH PRIVATE KEY-----
+        github_repo: ssh_url_repo
+        github_branch: main
+    join-control-plane: # Add if exists, otherwise comment out
+      hosts:
+        vmd140544:
+          ansible_host: public_ip
+          private_ip: private_ip
+    workers:
+      hosts:
+        vmd187075:
+          ansible_host: public_ip
+          private_ip: private_ip
+        vmd187076:
+          ansible_host: public_ip
+          private_ip: private_ip

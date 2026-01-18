@@ -1,8 +1,0 @@
-apiVersion: cilium.io/v2alpha1
-kind: CiliumLoadBalancerIPPool
-metadata:
-  name: public-pool
-spec:
-  blocks:
-  - start: public-ip
-    stop: public-ip

@@ -1,0 +1,80 @@
+- name: Check if flux-operator is installed
+  command: helm status flux-operator -n flux-system
+  register: flux_operator_status
+  failed_when: false
+  changed_when: false
+
+- name: Install Flux Operator if missing
+  command: >
+    helm install flux-operator
+    oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
+    --namespace flux-system
+    --create-namespace
+  when: flux_operator_status.rc != 0
+
+- name: Enable Flux controllers
+  shell: |
+    kubectl apply -f - <<'EOF'
+    apiVersion: fluxcd.controlplane.io/v1
+    kind: FluxInstance
+    metadata:
+      name: flux
+      namespace: flux-system
+    spec:
+      distribution:
+        version: "2.x"
+        registry: ghcr.io/fluxcd
+      components:
+        - source-controller
+        - kustomize-controller
+        - helm-controller
+        - notification-controller
+    EOF
+
+- name: Create Flux GitHub SSH secret
+  shell: |
+    kubectl apply -f - <<'EOF'
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: github-auth
+      namespace: flux-system
+    type: kubernetes.io/ssh-auth
+    data:
+      ssh-privatekey: {{ flux_github_ssh_key_b64 }}
+    EOF
+
+- name: Create Flux GitRepository
+  shell: |
+    kubectl apply -f - <<'EOF'
+    apiVersion: source.toolkit.fluxcd.io/v1
+    kind: GitRepository
+    metadata:
+      name: cluster-config
+      namespace: flux-system
+    spec:
+      interval: 1m
+      url: {{ github_repo }}
+      ref:
+        branch: {{ github_branch }}
+      secretRef:
+        name: github-auth
+    EOF
+
+- name: Create Flux Kustomization
+  shell: |
+    kubectl apply -f - <<'EOF'
+    apiVersion: kustomize.toolkit.fluxcd.io/v1
+    kind: Kustomization
+    metadata:
+      name: production
+      namespace: flux-system
+    spec:
+      interval: 5m
+      path: ./kube
+      prune: true
+      wait: true
+      sourceRef:
+        kind: GitRepository
+        name: cluster-config
+    EOF

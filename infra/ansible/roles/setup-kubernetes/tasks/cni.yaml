@@ -58,3 +58,16 @@
     --set loadBalancer.acceleration=native
     --set loadBalancer.mode=dsr
   when: cilium_status.rc != 0
+
+- name: Create Flux GitRepository
+  shell: |
+    kubectl apply -f - <<'EOF'
+    apiVersion: cilium.io/v2alpha1
+    kind: CiliumLoadBalancerIPPool
+    metadata:
+      name: public-pool
+    spec:
+      blocks:
+      - start: "hostvars[inventory_hostname]['ansible_host']"
+        stop: "hostvars[inventory_hostname]['ansible_host']"
+    EOF
