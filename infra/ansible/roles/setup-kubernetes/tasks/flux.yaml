@@ -67,7 +67,7 @@
         name: github-auth
     EOF
 
-- name: Create Flux Kustomization
+- name: Create infrastructure Flux Kustomization
   shell: |
     kubectl apply -f - <<'EOF'
     apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -78,6 +78,24 @@
     spec:
       interval: 5m
       path: ./infra/kube
+      prune: true
+      wait: true
+      sourceRef:
+        kind: GitRepository
+        name: cluster-config
+    EOF
+
+- name: Create Test App Flux Kustomization
+  shell: |
+    kubectl apply -f - <<'EOF'
+    apiVersion: kustomize.toolkit.fluxcd.io/v1
+    kind: Kustomization
+    metadata:
+      name: test_app
+      namespace: flux-system
+    spec:
+      interval: 5m
+      path: ./infra/kube/apps/test_app
       prune: true
       wait: true
       sourceRef:
