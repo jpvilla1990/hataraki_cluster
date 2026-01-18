@@ -12,3 +12,6 @@
 
 - name: Flux installation
   include_tasks: flux.yaml
+
+- name: Cert-Manager installation
+  include_tasks: cert_manager.yaml
