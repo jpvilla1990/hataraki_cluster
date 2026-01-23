@@ -16,3 +16,8 @@ spec:
       interval: 1m
   install:
     createNamespace: true
+  values:
+    server:
+      dataStorage:
+        enabled: true
+        storageClass: "local-path"
