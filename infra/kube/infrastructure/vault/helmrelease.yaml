@@ -16,3 +16,7 @@ spec:
       interval: 1m
   install:
     createNamespace: true
+  values:
+    server:
+      dataStorage:
+        storageClass: "standard"
