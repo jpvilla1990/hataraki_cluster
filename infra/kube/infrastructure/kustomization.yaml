@@ -3,5 +3,5 @@ kind: Kustomization
 resources:
   - cert_manager
   - ingress
-  - vault
+  # - vault
   # - storage

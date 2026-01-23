@@ -15,3 +15,6 @@
 
 - name: CRD setup
   include_tasks: crd.yaml
+
+- name: CSI setup
+  include_tasks: csi.yaml
