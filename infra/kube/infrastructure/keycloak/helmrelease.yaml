@@ -38,3 +38,6 @@ spec:
         username: keycloak
         password: keycloak-db-pass
         database: keycloak
+    defaultInitContainers:
+      prepareWriteDirs:
+        enabled: false
