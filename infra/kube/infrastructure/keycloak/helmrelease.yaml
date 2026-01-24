@@ -23,6 +23,8 @@ spec:
       registry: quay.io
       repository: keycloak/keycloak
       tag: 26.3.3
+    args:
+      - start
     auth:
       adminUser: admin
       adminPassword: changeme  # Change this!
