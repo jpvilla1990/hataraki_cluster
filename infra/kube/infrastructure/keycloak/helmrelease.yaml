@@ -1,0 +1,36 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: keycloak
+  namespace: keycloak
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: keycloak
+      version: '*'
+      sourceRef:
+        kind: HelmRepository
+        name: bitnami
+        namespace: keycloak
+  install:
+    createNamespace: true
+  values:
+    auth:
+      adminUser: admin
+      adminPassword: changeme  # Change this!
+    
+    service:
+      type: ClusterIP
+      ports:
+        http: 8080
+    
+    ingress:
+      enabled: false
+    
+    postgresql:
+      enabled: true
+      auth:
+        username: keycloak
+        password: keycloak-db-pass
+        database: keycloak

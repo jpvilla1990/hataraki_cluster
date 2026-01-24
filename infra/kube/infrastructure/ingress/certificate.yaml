@@ -8,6 +8,7 @@ spec:
   dnsNames:
     - test.hatarakiassistant.com
     - vault.hatarakiassistant.com
+    - keycloak.hatarakiassistant.com
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer

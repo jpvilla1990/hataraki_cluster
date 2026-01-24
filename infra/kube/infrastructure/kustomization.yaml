@@ -4,4 +4,4 @@ resources:
   - cert_manager
   - ingress
   - vault
-  # - storage
+  - keycloak
