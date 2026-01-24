@@ -18,6 +18,7 @@ spec:
         image: quay.io/keycloak/keycloak:26.5.2
         args:
           - start
+          - --hostname https://keycloak.hatarakiassistant.com
         env:
         - name: KC_BOOTSTRAP_ADMIN_USERNAME
           value: admin
