@@ -16,6 +16,8 @@ spec:
   install:
     createNamespace: true
   values:
+    security:
+      allowInsecureImages: false
     image:
       registry: quay.io
       repository: keycloak/keycloak
