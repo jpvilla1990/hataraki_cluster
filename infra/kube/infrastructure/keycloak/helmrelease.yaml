@@ -16,18 +16,19 @@ spec:
   install:
     createNamespace: true
   values:
+    image:
+      registry: quay.io
+      repository: keycloak/keycloak
+      tag: 26.3.3
     auth:
       adminUser: admin
       adminPassword: changeme  # Change this!
-    
     service:
       type: ClusterIP
       ports:
         http: 8080
-    
     ingress:
       enabled: false
-    
     postgresql:
       enabled: true
       auth:
