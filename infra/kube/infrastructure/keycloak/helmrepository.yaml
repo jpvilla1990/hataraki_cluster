@@ -5,4 +5,5 @@ metadata:
   namespace: keycloak
 spec:
   interval: 1h
+  type: oci
   url: oci://registry-1.docker.io/bitnamicharts
