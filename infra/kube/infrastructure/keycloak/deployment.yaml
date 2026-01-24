@@ -30,3 +30,10 @@ spec:
         ports:
         - containerPort: 8080
           name: http
+        volumeMounts:
+        - name: keycloak-data
+          mountPath: /opt/keycloak/data
+      volumes:
+      - persistentVolumeClaim:
+          claimName: keycloak
+        name: keycloak-data
