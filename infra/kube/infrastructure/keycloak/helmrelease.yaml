@@ -11,7 +11,7 @@ spec:
       version: '25.2.0'
       sourceRef:
         kind: HelmRepository
-        name: binami
+        name: bitnami
         namespace: keycloak
   install:
     createNamespace: true
