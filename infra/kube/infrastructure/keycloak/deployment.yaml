@@ -28,7 +28,7 @@ spec:
         - name: KC_BOOTSTRAP_ADMIN_PASSWORD
           value: admin
         - name: JAVA_OPTS_APPEND
-          values: "-Djava.net.preferIPv4Stack=true"
+          value: "-Djava.net.preferIPv4Stack=true"
         ports:
         - containerPort: 8080
           name: http
