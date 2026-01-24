@@ -16,10 +16,11 @@ spec:
       containers:
       - name: keycloak
         image: quay.io/keycloak/keycloak:26.5.2
-        args:
-          - start-dev
-          - --hostname
-          - https://keycloak.hatarakiassistant.com
+        command: ["sleep infinity"]
+        #args:
+        #  - start-dev
+        #  - --hostname
+        #  - https://keycloak.hatarakiassistant.com
         env:
         - name: KC_BOOTSTRAP_ADMIN_USERNAME
           value: admin
