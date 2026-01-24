@@ -17,12 +17,14 @@ spec:
       - name: keycloak
         image: quay.io/keycloak/keycloak:26.5.2
         args:
-          - start-dev
+          - start
         env:
         - name: KC_BOOTSTRAP_ADMIN_USERNAME
           value: admin
         - name: KC_BOOTSTRAP_ADMIN_PASSWORD
           value: admin
+        - name: JAVA_OPTS_APPEND
+          values: "-Djava.net.preferIPv4Stack=true"
         ports:
         - containerPort: 8080
           name: http
