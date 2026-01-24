@@ -16,8 +16,9 @@ spec:
       containers:
       - name: keycloak
         image: quay.io/keycloak/keycloak:26.5.2
-        command: ["sleep infinity"]
-        #args:
+        command: ["/bin/sleep"]
+        args:
+        - infinity
         #  - start-dev
         #  - --hostname
         #  - https://keycloak.hatarakiassistant.com
