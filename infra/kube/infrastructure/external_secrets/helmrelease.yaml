@@ -15,5 +15,8 @@ spec:
         namespace: external-secrets
   install:
     createNamespace: true
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
   values:
     installCRDs: true

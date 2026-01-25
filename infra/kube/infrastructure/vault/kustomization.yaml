@@ -8,4 +8,5 @@ resources:
   - clusterrolebinding.yaml
   - secret.yaml
   - serviceaccount.yaml
-  - secretstore.yaml
+  - clustersecretstore.yaml
+  - externalsecret.yaml

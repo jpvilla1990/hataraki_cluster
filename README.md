@@ -54,19 +54,54 @@ vault write auth/oidc/role/vault-role \
 
 ## Access Management Vault
 
-After the first user has login with a google account, a new entity will appear, mapping the email to the name.
+- After the first user has login with a google account, a new entity will appear, mapping the email to the name.
 Go to Access - Groups, create a new group, add the existing policy `admin-policy`, and find the authenticated entity via google to then add it.
-Once the user logout and login, he/she should be able to see the desired secret engine.
+- Once the user logout and login, he/she should be able to see the desired secret engine.
 
-Create an `kube` policy with the following permissions:
+- Create an `kube` policy with the following permissions:
 ```hcl
-path "hatarakiassistant_secrets/*" {
-  capabilities = ["read"]
+path "hatarakiassistant_secrets/data/*" {
+  capabilities = ["read", "list"]
+}
+
+path "hatarakiassistant_secrets/metadata/*" {
+  capabilities = ["read", "list"]
 }
 ```
 
-Enable kubernetes auth in vault.
+- Enable kubernetes auth in vault.
+- Get kubernetes hostname and token
+```bash
+# Get kubernetes hostname
+KUBERNETES_HOST=$(kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[0].cluster.server}')
 
+# Get the service account token
+TOKEN_REVIEWER_JWT=$(kubectl get secret vault-auth-token -n vault -o jsonpath='{.data.token}' | base64 -d)
+```
+
+- Configure service account in vault
+```bash
+kubectl exec -it $VAULT_POD_NAME -n vault -- sh
+
+# Enable kubernetes
+vault auth enable kubernetes
+
+# Configure kubernetes config
+vault write auth/kubernetes/config \
+  token_reviewer_jwt="$TOKEN_REVIEWER_JWT" \
+  kubernetes_host="$KUBERNETES_HOST" \
+  kubernetes_ca_cert=@/var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
+  disable_iss_validation=true
+
+# Configure external secrets role
+vault write auth/kubernetes/role/external-secrets-role \
+  bound_service_account_names=vault \
+  bound_service_account_namespaces=vault \
+  policies=kube \
+  ttl=24h
+```
+
+- 
 
 
 ## Notes
