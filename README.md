@@ -95,8 +95,8 @@ vault write auth/kubernetes/config \
 
 # Configure external secrets role
 vault write auth/kubernetes/role/external-secrets-role \
-  bound_service_account_names=vault \
-  bound_service_account_namespaces=vault \
+  bound_service_account_names=vault-auth \
+  bound_service_account_namespaces=vault-auth \
   policies=kube \
   ttl=24h
 ```
