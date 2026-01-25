@@ -6,3 +6,4 @@ resources:
   - vault
   - keycloak
   - external_secrets
+  - backup
