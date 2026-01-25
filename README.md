@@ -15,7 +15,7 @@ ansible-playbook playbooks/site.yaml
 - In google auth https://console.cloud.google.com/auth/clients, a Oauth client must be created, capturing `client-id` and `client secret`.
 - In keycloak an Identity Provider with Google must be created.
 - Use the `client-id` and `client secret` from google and set them in the Identy Provider configuration, then capture `Redirect URI` and store it in Oauth in google console.
-- Create a realm
+- Create a realm: hatarakiassistant
 - Create a client called `vault` with the following inputs:
 * Client-id: vault
 * Valid redirect URIs: <VAULT_HOSTNAME>/ui/vault/auth/oidc/oidc/callback
@@ -33,7 +33,7 @@ ansible-playbook playbooks/site.yaml
 kubectl exec -it $VAULT_POD_NAME -n vault -- sh
 export VAULT_TOKEN=$VAULT_ROOT_TOKEN
 # Configure oidc
-vault write auth/oidc/config oidc_discovery_url="$KEY_CLOAK_URL/realms/$REALM" \
+vault write auth/oidc/config oidc_discovery_url="$KEY_CLOAK_URL/realms/hatarakiassistant" \
    oidc_client_id='vault' \
    oidc_client_secret=$CLIENT_SECRET \
    default_role='vault-role'
@@ -57,6 +57,16 @@ vault write auth/oidc/role/vault-role \
 After the first user has login with a google account, a new entity will appear, mapping the email to the name.
 Go to Access - Groups, create a new group, add the existing policy `admin-policy`, and find the authenticated entity via google to then add it.
 Once the user logout and login, he/she should be able to see the desired secret engine.
+
+Create an `kube` policy with the following permissions:
+```hcl
+path "hatarakiassistant_secrets/*" {
+  capabilities = ["read"]
+}
+```
+
+Enable kubernetes auth in vault.
+
 
 
 ## Notes

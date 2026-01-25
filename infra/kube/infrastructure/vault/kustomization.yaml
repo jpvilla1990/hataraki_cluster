@@ -5,3 +5,6 @@ resources:
   - helmrepository.yaml
   - helmrelease.yaml
   - httproute.yaml
+  - clusterrolebinding.yaml
+  - secret.yaml
+  - serviceaccount.yaml
