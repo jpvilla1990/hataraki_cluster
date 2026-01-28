@@ -1,0 +1,68 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pvc-backup
+  namespace: backup
+spec:
+  ttlSecondsAfterFinished: 86400
+  template:
+    metadata:
+      labels:
+        app: backup
+    spec:
+      serviceAccountName: backup-sa
+      restartPolicy: OnFailure
+      initContainers:
+      - name: scale-down
+        image: bitnami/kubectl:latest
+        command: ["/bin/sh", "/scripts/scale-down.sh"]
+        volumeMounts:
+        - name: backup-script
+          mountPath: /scripts
+      containers:
+      - name: backup
+        image: alpine:3.18
+        command: ["/bin/sh", "/scripts/backup.sh"]
+        volumeMounts:
+        - name: keycloak-data
+          mountPath: /data/keycloak
+          readOnly: true
+        - name: vault-data
+          mountPath: /data/vault
+          readOnly: true
+        - name: backup-destination
+          mountPath: /backup
+        - name: backup-script
+          mountPath: /scripts
+      
+      # Post-backup: scale up applications
+      - name: scale-up
+        image: bitnami/kubectl:latest
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          # Wait for backup container to complete
+          while [ ! -f /backup/.backup-complete ]; do
+            sleep 5
+          done
+          /scripts/scale-up.sh
+        volumeMounts:
+        - name: backup-script
+          mountPath: /scripts
+        - name: backup-destination
+          mountPath: /backup
+      
+      volumes:
+      - name: keycloak-data
+        persistentVolumeClaim:
+          claimName: keycloak
+      - name: vault-data
+        persistentVolumeClaim:
+          claimName: data-vault-0
+      - name: backup-destination
+        persistentVolumeClaim:
+          claimName: backup-storage
+      - name: backup-script
+        configMap:
+          name: backup-script
+          defaultMode: 0755

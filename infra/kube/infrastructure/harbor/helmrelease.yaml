@@ -18,6 +18,8 @@ spec:
     createNamespace: true
   values:
     expose:
+      tls:
+        enabled: false
       type: route
       route:
         hosts:
