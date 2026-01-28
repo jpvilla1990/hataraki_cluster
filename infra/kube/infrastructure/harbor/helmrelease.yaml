@@ -35,7 +35,8 @@ spec:
         registry:
           storageClass: "local-path"
         jobservice:
-          storageClass: "local-path"
+          jobLog:
+            storageClass: "local-path"
         database:
           storageClass: "local-path"
         trivy:
