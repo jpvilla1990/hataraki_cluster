@@ -30,3 +30,15 @@ spec:
     externalURL: https://harbor.hatarakiassistant.com
     existingSecretAdminPassword: harbor
     existingSecretAdminPasswordKey: admin_password
+    persistence:
+      persistentVolumeClaim:
+        registry:
+          storageClass: "local-path"
+        jobservice:
+          storageClass: "local-path"
+        database:
+          storageClass: "local-path"
+        trivy:
+          storageClass: "local-path"
+        redis:
+          storageClass: "local-path"
