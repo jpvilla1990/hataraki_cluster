@@ -76,6 +76,6 @@
       name: public-pool
     spec:
       blocks:
-      - start: "hostvars[inventory_hostname]['ansible_host']"
-        stop: "hostvars[inventory_hostname]['ansible_host']"
+      - start: {{ hostvars[inventory_hostname]['ansible_host'] }}
+        stop: {{ hostvars[inventory_hostname]['ansible_host'] }}
     EOF
