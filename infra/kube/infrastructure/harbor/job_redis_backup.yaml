@@ -54,6 +54,7 @@ spec:
         command: ["/bin/sh", "-c"]
         args:
         - |
+          BACKUP_NAME="harbor-redis-backup"
           echo "Available remotes:"
           OBSCURED_PASSWORD=$(rclone obscure ${PROTON_PASSWORD})
           cat > /backup/rclone.conf <<EOF
@@ -70,7 +71,11 @@ spec:
           rclone listremotes --config /backup/rclone.conf
 
           BACKUP_DATE=$(date +%Y%m%d-%H%M%S)
-          BACKUP_FILE="harbor-redis-${BACKUP_DATE}.tar.gz"
+          BACKUP_FILE="${BACKUP_NAME}-${BACKUP_DATE}.tar.gz"
+
+          rclone delete protondrive:hatarakiassistant/backup/ \
+            --include "${BACKUP_NAME}-*.tar.gz" \
+            --config /backup/rclone.conf
 
           echo "Creating backup..."
           tar czf /backup/${BACKUP_FILE} -C  /data/harbor-redis/ .
