@@ -20,20 +20,72 @@ spec:
       containers:
       - name: backup
         image: rclone/rclone:latest
+        env:
+      - name: PROTON_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: rclone-config
+            key: proton_username
+      - name: PROTON_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: rclone-config
+            key: proton_password
+      - name: PROTON_CLIENT_UID
+        valueFrom:
+          secretKeyRef:
+            name: rclone-config
+            key: proton_client_uid
+      - name: PROTON_CLIENT_ACCESS_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: rclone-config
+            key: proton_client_access_token
+      - name: PROTON_CLIENT_REFRESH_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: rclone-config
+            key: proton_client_refresh_token
+      - name: PROTON_CLIENT_SALTED_KEY_PASS
+        valueFrom:
+          secretKeyRef:
+            name: rclone-config
+            key: proton_client_salted_key_pass
         command: ["/bin/sh", "-c"]
         args:
         - |
-          rclone help
-          sleep 3600
+          echo "Available remotes:"
+          OBSCURED_PASSWORD=$(rclone obscure ${PROTON_PASSWORD})
+          cat > /backup/rclone.conf <<EOF
+          [protondrive]
+          type = protondrive
+          username = ${PROTON_USERNAME}
+          password = ${OBSCURED_PASSWORD}
+          client_uid = ${PROTON_CLIENT_UID}
+          client_access_token = ${PROTON_CLIENT_ACCESS_TOKEN}
+          client_refresh_token = ${PROTON_CLIENT_REFRESH_TOKEN}
+          client_salted_key_pass = ${PROTON_CLIENT_SALTED_KEY_PASS}
+          EOF
+
+          rclone listremotes --config /backup/rclone.conf
+
+          BACKUP_DATE=$(date +%Y%m%d-%H%M%S)
+          BACKUP_FILE="harbor-redis-${BACKUP_DATE}.tar.gz"
+
+          echo "Creating backup..."
+          tar czf /backup/${BACKUP_FILE} -C  /data/harbor-redis/ .
+
+          echo "Uploading backup to Proton Drive..."
+          rclone copy /backup/${BACKUP_FILE} \
+            protondrive:hatarakiassistant/backup/${BACKUP_FILE} \
+            --config /backup/rclone.conf --progress
+          touch /backup/.backup-complete
         volumeMounts:
-        - name: harbor-1
+        - name: harbor
           mountPath: /data/harbor-redis
           readOnly: true
         - name: backup
           mountPath: /backup
-        - name: rclone-config
-          mountPath: /config/rclone
-          readOnly: true
 
       # Post-backup: scale up applications
       - name: scale-up
@@ -51,14 +103,8 @@ spec:
           mountPath: /backup
 
       volumes:
-      - name: harbor-1
+      - name: harbor
         persistentVolumeClaim:
           claimName: data-harbor-redis-0
       - name: backup
         emptyDir: {}
-      - name: rclone-config
-        secret:
-          secretName: rclone-config
-          items:
-          - key: rclone.conf
-            path: rclone.conf
