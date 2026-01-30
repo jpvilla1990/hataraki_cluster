@@ -1,0 +1,119 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: harbor-trivy-backup
+  namespace: harbor
+spec:
+  schedule: "0 0 * * 0"   # Every Sunday at midnight
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 86400
+      template:
+        spec:
+          serviceAccountName: backup-sa
+          restartPolicy: OnFailure
+
+          initContainers:
+          - name: scale-down
+            image: alpine/k8s:1.28.3
+            command: ["/bin/sh", "-c"]
+            args:
+            - |
+              kubectl scale statefulset harbor-trivy -n harbor --replicas=0
+              kubectl wait --for=delete pod -l app=harbor -n harbor --timeout=300s || true
+
+          containers:
+          - name: backup
+            image: rclone/rclone:latest
+            env:
+            - name: PROTON_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: rclone-config
+                  key: proton_username
+            - name: PROTON_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rclone-config
+                  key: proton_password
+            - name: PROTON_CLIENT_UID
+              valueFrom:
+                secretKeyRef:
+                  name: rclone-config
+                  key: proton_client_uid
+            - name: PROTON_CLIENT_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: rclone-config
+                  key: proton_client_access_token
+            - name: PROTON_CLIENT_REFRESH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: rclone-config
+                  key: proton_client_refresh_token
+            - name: PROTON_CLIENT_SALTED_KEY_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: rclone-config
+                  key: proton_client_salted_key_pass
+
+            command: ["/bin/sh", "-c"]
+            args:
+            - |
+              BACKUP_NAME="harbor-trivy-backup"
+
+              OBSCURED_PASSWORD=$(rclone obscure ${PROTON_PASSWORD})
+              cat > /backup/rclone.conf <<EOF
+              [protondrive]
+              type = protondrive
+              username = ${PROTON_USERNAME}
+              password = ${OBSCURED_PASSWORD}
+              client_uid = ${PROTON_CLIENT_UID}
+              client_access_token = ${PROTON_CLIENT_ACCESS_TOKEN}
+              client_refresh_token = ${PROTON_CLIENT_REFRESH_TOKEN}
+              client_salted_key_pass = ${PROTON_CLIENT_SALTED_KEY_PASS}
+              EOF
+
+              BACKUP_DATE=$(date +%Y%m%d-%H%M%S)
+              BACKUP_FILE="${BACKUP_NAME}-${BACKUP_DATE}.tar.gz"
+
+              echo "Creating backup..."
+              tar czf /backup/${BACKUP_FILE} -C /data/harbor-trivy/ .
+
+              echo "Uploading backup..."
+              rclone copy /backup/${BACKUP_FILE} \
+                protondrive:hatarakiassistant/backup/${BACKUP_FILE} \
+                --config /backup/rclone.conf --progress
+
+              touch /backup/.backup-complete
+
+            volumeMounts:
+            - name: harbor
+              mountPath: /data/harbor-trivy
+              readOnly: true
+            - name: backup
+              mountPath: /backup
+
+          - name: scale-up
+            image: alpine/k8s:1.28.3
+            command: ["/bin/sh", "-c"]
+            args:
+            - |
+              while [ ! -f /backup/.backup-complete ]; do
+                sleep 5
+              done
+              kubectl scale statefulset harbor-trivy -n harbor --replicas=1
+            volumeMounts:
+            - name: backup
+              mountPath: /backup
+
+          volumes:
+          - name: harbor
+            persistentVolumeClaim:
+              claimName: data-harbor-trivy-0
+          - name: backup
+            emptyDir: {}
