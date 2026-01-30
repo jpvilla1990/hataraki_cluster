@@ -1,0 +1,64 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: harbor-redis-backup
+  namespace: harbor
+spec:
+  ttlSecondsAfterFinished: 86400
+  template:
+    spec:
+      serviceAccountName: backup-sa
+      restartPolicy: OnFailure
+      initContainers:
+      - name: scale-down
+        image: alpine/k8s:1.28.3
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          kubectl scale statefulset harbor-redis -n harbor --replicas=0
+          kubectl wait --for=delete pod -l app=harbor -n harbor --timeout=300s || true
+      containers:
+      - name: backup
+        image: rclone/rclone:latest
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          rclone help
+          sleep 3600
+        volumeMounts:
+        - name: harbor-1
+          mountPath: /data/harbor-redis
+          readOnly: true
+        - name: backup
+          mountPath: /backup
+        - name: rclone-config
+          mountPath: /config/rclone
+          readOnly: true
+
+      # Post-backup: scale up applications
+      - name: scale-up
+        image: alpine/k8s:1.28.3
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          # Wait for backup container to complete
+          while [ ! -f /backup/.backup-complete ]; do
+            sleep 5
+          done
+          kubectl scale statefulset harbor-redis -n harbor --replicas=1
+        volumeMounts:
+        - name: backup
+          mountPath: /backup
+
+      volumes:
+      - name: harbor-1
+        persistentVolumeClaim:
+          claimName: data-harbor-redis-0
+      - name: backup
+        emptyDir: {}
+      - name: rclone-config
+        secret:
+          secretName: rclone-config
+          items:
+          - key: rclone.conf
+            path: rclone.conf

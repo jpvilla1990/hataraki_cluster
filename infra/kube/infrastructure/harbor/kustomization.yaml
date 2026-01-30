@@ -5,3 +5,5 @@ resources:
   - helmrepository.yaml
   - helmrelease.yaml
   - externalsecret.yaml
+  - job_redis_backup.yaml
+  - serviceaccount.yaml

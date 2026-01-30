@@ -1,43 +1,37 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: pvc-backup
-  namespace: backup
+  name: harbor-trivy-backup
+  namespace: harbor
 spec:
   ttlSecondsAfterFinished: 86400
   template:
-    metadata:
-      labels:
-        app: backup
     spec:
       serviceAccountName: backup-sa
       restartPolicy: OnFailure
       initContainers:
       - name: scale-down
-        image: bitnami/kubectl:latest
+        image: alpine/k8s:1.28.3
         command: ["/bin/sh", "/scripts/scale-down.sh"]
         volumeMounts:
         - name: backup-script
           mountPath: /scripts
       containers:
       - name: backup
-        image: alpine:3.18
+        image: rclone/rclone:latest
         command: ["/bin/sh", "/scripts/backup.sh"]
         volumeMounts:
-        - name: keycloak-data
-          mountPath: /data/keycloak
+        - name: harbor-2
+          mountPath: /data/harbor-trivy
           readOnly: true
-        - name: vault-data
-          mountPath: /data/vault
-          readOnly: true
-        - name: backup-destination
-          mountPath: /backup
         - name: backup-script
           mountPath: /scripts
-      
+        - name: backup
+          mountPath: /backup
+
       # Post-backup: scale up applications
       - name: scale-up
-        image: bitnami/kubectl:latest
+        image: alpine/k8s:1.28.3
         command: ["/bin/sh", "-c"]
         args:
         - |
@@ -49,19 +43,15 @@ spec:
         volumeMounts:
         - name: backup-script
           mountPath: /scripts
-        - name: backup-destination
+        - name: backup
           mountPath: /backup
-      
+
       volumes:
-      - name: keycloak-data
+      - name: harbor-2
         persistentVolumeClaim:
-          claimName: keycloak
-      - name: vault-data
-        persistentVolumeClaim:
-          claimName: data-vault-0
-      - name: backup-destination
-        persistentVolumeClaim:
-          claimName: backup-storage
+          claimName: data-harbor-trivy-0
+      - name: backup
+        emptyDir: {}
       - name: backup-script
         configMap:
           name: backup-script
