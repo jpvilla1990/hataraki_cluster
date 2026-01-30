@@ -21,36 +21,36 @@ spec:
       - name: backup
         image: rclone/rclone:latest
         env:
-      - name: PROTON_USERNAME
-        valueFrom:
-          secretKeyRef:
-            name: rclone-config
-            key: proton_username
-      - name: PROTON_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: rclone-config
-            key: proton_password
-      - name: PROTON_CLIENT_UID
-        valueFrom:
-          secretKeyRef:
-            name: rclone-config
-            key: proton_client_uid
-      - name: PROTON_CLIENT_ACCESS_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: rclone-config
-            key: proton_client_access_token
-      - name: PROTON_CLIENT_REFRESH_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: rclone-config
-            key: proton_client_refresh_token
-      - name: PROTON_CLIENT_SALTED_KEY_PASS
-        valueFrom:
-          secretKeyRef:
-            name: rclone-config
-            key: proton_client_salted_key_pass
+        - name: PROTON_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: rclone-config
+              key: proton_username
+        - name: PROTON_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: rclone-config
+              key: proton_password
+        - name: PROTON_CLIENT_UID
+          valueFrom:
+            secretKeyRef:
+              name: rclone-config
+              key: proton_client_uid
+        - name: PROTON_CLIENT_ACCESS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: rclone-config
+              key: proton_client_access_token
+        - name: PROTON_CLIENT_REFRESH_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: rclone-config
+              key: proton_client_refresh_token
+        - name: PROTON_CLIENT_SALTED_KEY_PASS
+          valueFrom:
+            secretKeyRef:
+              name: rclone-config
+              key: proton_client_salted_key_pass
         command: ["/bin/sh", "-c"]
         args:
         - |
