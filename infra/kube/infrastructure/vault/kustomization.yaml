@@ -10,3 +10,4 @@ resources:
   - serviceaccount.yaml
   - clustersecretstore.yaml
   - externalsecret.yaml
+  - cronjob_backup.yaml
