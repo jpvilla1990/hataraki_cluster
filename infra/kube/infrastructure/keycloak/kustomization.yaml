@@ -7,3 +7,4 @@ resources:
   - httproute.yaml
   - pvc.yaml
   - cronjob_backup.yaml
+  - serviceaccount.yaml
