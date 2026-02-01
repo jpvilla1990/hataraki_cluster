@@ -8,3 +8,4 @@ resources:
   - pvc.yaml
   - cronjob_backup.yaml
   - serviceaccount.yaml
+  - externalsecret.yaml
