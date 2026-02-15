@@ -25,7 +25,7 @@ spec:
             - name: LLM_API_ENDPOINT
               valueFrom:
                 configMapKeyRef:
-                  name: hataraki_assistant-config
+                  name: hataraki-assistant-config
                   key: LLM_API_ENDPOINT
             # Individual keys from Secret
             - name: TELEGRAM_BOT_TOKEN
