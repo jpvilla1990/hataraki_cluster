@@ -20,7 +20,7 @@ spec:
         - name: docker-pull-secret
       containers:
         - name: telegram-bot
-          image: harbor.hatarakiassistant.com/docker/telegram_bot:0.2.0
+          image: harbor.hatarakiassistant.com/docker/telegram_bot:0.3.0
           env:
             - name: LLM_API_ENDPOINT
               valueFrom:
