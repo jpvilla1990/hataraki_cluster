@@ -95,7 +95,7 @@
       namespace: flux-system
     spec:
       interval: 5m
-      path: ./infra/kube/apps/test_app
+      path: ./infra/kube/apps
       prune: true
       wait: true
       sourceRef:
