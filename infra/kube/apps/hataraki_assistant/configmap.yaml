@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: hataraki_assistant-config
+  name: hataraki-assistant-config
   namespace: hataraki-assistant
 data:
   LLM_API_ENDPOINT: https://api.regolo.ai/v1/chat/completions
