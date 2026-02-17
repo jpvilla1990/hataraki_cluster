@@ -7,7 +7,7 @@ metadata:
   labels:
     app: hataraki-assistant
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: hataraki-assistant
@@ -20,7 +20,7 @@ spec:
         - name: docker-pull-secret
       containers:
         - name: telegram-bot
-          image: harbor.hatarakiassistant.com/docker/telegram_bot:0.3.0
+          image: harbor.hatarakiassistant.com/docker/telegram_bot:0.4.0
           env:
             - name: LLM_API_ENDPOINT
               valueFrom:
@@ -38,6 +38,9 @@ spec:
                 secretKeyRef:
                   name: regolo-tokens
                   key: token
+          volumeMounts:
+            - name: output
+              mountPath: /app/output
           resources:
             requests:
               memory: "128Mi"
@@ -45,3 +48,6 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "500m"
+      volumes:
+        - name: output
+          emptyDir: {}
