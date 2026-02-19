@@ -5,4 +5,4 @@ metadata:
   namespace: hataraki-assistant
 data:
   LLM_API_ENDPOINT: https://api.regolo.ai/v1/chat/completions
-  MCP_API_ENDPOINT: MCP_API_ENDPOINT
+  MCP_API_ENDPOINT: http://localhost:8000
