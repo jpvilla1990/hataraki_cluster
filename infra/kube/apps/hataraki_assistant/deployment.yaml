@@ -2,11 +2,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hataraki-assistant-backend
+  name: hataraki-assistant
   namespace: hataraki-assistant
   labels:
     app: hataraki-assistant
-    component: hataraki-assistant-backend
 spec:
   replicas: 1
   selector:
@@ -20,6 +19,40 @@ spec:
       imagePullSecrets:
         - name: docker-pull-secret
       containers:
+        - name: telegram-bot
+          image: harbor.hatarakiassistant.com/docker/telegram_bot:0.8.0
+          env:
+            - name: LLM_API_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: hataraki-assistant-config
+                  key: LLM_API_ENDPOINT
+            - name: MCP_API_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: hataraki-assistant-config
+                  key: MCP_API_ENDPOINT
+            # Individual keys from Secret
+            - name: TELEGRAM_BOT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: telegram-bot-secrets
+                  key: bot_token
+            - name: LLM_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: regolo-tokens
+                  key: token
+          volumeMounts:
+            - name: output
+              mountPath: /app/telegram_bot/output
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
         - name: mcp-server
           image: harbor.hatarakiassistant.com/docker/backend:0.2.0
           ports:
