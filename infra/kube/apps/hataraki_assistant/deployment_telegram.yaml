@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hataraki-assistant
+  name: hataraki-assistant-telegram
   namespace: hataraki-assistant
   labels:
     app: hataraki-assistant
@@ -46,37 +46,6 @@ spec:
           volumeMounts:
             - name: output
               mountPath: /app/telegram_bot/output
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "100m"
-            limits:
-              memory: "256Mi"
-              cpu: "500m"
-        - name: mcp-server
-          image: harbor.hatarakiassistant.com/docker/backend:0.2.0
-          ports:
-            - containerPort: 8000
-          env:
-            - name: LLM_API_ENDPOINT
-              valueFrom:
-                configMapKeyRef:
-                  name: hataraki-assistant-config
-                  key: LLM_API_ENDPOINT
-            - name: BACKEND_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: hataraki-assistant-config
-                  key: MCP_API_ENDPOINT
-            # Individual keys from Secret
-            - name: LLM_API_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: regolo-tokens
-                  key: token
-          volumeMounts:
-            - name: output
-              mountPath: /app/backend/output
           resources:
             requests:
               memory: "128Mi"
