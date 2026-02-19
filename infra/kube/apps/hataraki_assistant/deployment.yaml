@@ -37,7 +37,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: telegram-bot-secrets
-                  key: token
+                  key: bot_token
             - name: LLM_API_TOKEN
               valueFrom:
                 secretKeyRef:
