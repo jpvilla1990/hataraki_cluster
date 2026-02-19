@@ -54,7 +54,7 @@ spec:
               memory: "256Mi"
               cpu: "500m"
         - name: mcp-server
-          image: harbor.hatarakiassistant.com/docker/backend:0.1.0
+          image: harbor.hatarakiassistant.com/docker/backend:0.2.0
           ports:
             - containerPort: 8000
           env:
