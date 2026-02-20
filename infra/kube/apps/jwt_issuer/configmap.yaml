@@ -5,4 +5,4 @@ metadata:
   namespace: jwt-issuer
 data:
   ISSUER: "jwt-issuer"
-  TOKEN_EXPIRE_MINUTES: 60
+  TOKEN_EXPIRE_MINUTES: "60"
