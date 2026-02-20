@@ -22,6 +22,8 @@ spec:
         - name: telegram-bot
           image: harbor.hatarakiassistant.com/docker/telegram_bot:0.8.0
           env:
+            - name: ISSUER_URL
+              value: http://jwt-issuer.jwt-issuer:8000
             - name: LLM_API_ENDPOINT
               valueFrom:
                 configMapKeyRef:
