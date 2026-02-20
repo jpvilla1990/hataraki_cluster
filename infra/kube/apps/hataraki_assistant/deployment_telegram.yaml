@@ -55,16 +55,6 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "500m"
-          volumeMounts:
-            - name: output
-              mountPath: /app/backend/output
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "100m"
-            limits:
-              memory: "256Mi"
-              cpu: "500m"
       volumes:
         - name: output
           emptyDir: {}
