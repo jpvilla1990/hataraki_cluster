@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jwt-issuer
+  namespace: jwt-issuer
+spec:
+  selector:
+    app: jwt-issuer
+  ports:
+    - port: 8000
+      targetPort: 8000

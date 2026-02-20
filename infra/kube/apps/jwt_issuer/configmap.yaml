@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jwt-issuer-config
+  namespace: jwt-issuer
+data:
+  ISSUER: "jwt-issuer"
+  TOKEN_EXPIRE_MINUTES: 60

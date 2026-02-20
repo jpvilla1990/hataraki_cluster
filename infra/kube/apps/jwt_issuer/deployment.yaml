@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jwt-issuer
+  namespace: jwt-issuer
+  labels:
+    app: jwt-issuer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jwt-issuer
+  template:
+    metadata:
+      labels:
+        app: jwt-issuer
+    spec:
+      containers:
+        - name: jwt-issuer
+          image: harbor.hatarakiassistant.com/docker/jwt_issuer:0.1.0
+          ports:
+            - containerPort: 8000
+          env:
+            - name: ROOT_KEY_PATH
+              value: /certs/ca.key
+            - name: ISSUER
+              valueFrom:
+                configMapKeyRef:
+                  name: jwt-issuer-config
+                  key: ISSUER
+            - name: TOKEN_EXPIRE_MINUTES
+              valueFrom:
+                configMapKeyRef:
+                  name: jwt-issuer-config
+                  key: TOKEN_EXPIRE_MINUTES
+            - name: ISSUER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-issuer
+                  key: token
+          volumeMounts:
+            - name: ca-secret
+              mountPath: /certs
+              readOnly: true
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
+      volumes:
+        - name: ca-secret
+          secret:
+            secretName: jwt-issuer
+            items:
+              - key: ca.key
+                path: ca.key
+
