@@ -15,6 +15,8 @@ spec:
       labels:
         app: jwt-issuer
     spec:
+      imagePullSecrets:
+        - name: docker-pull-secret
       containers:
         - name: jwt-issuer
           image: harbor.hatarakiassistant.com/docker/jwt_issuer:0.1.0
