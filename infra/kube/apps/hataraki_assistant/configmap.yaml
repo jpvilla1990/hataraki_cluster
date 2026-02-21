@@ -6,3 +6,5 @@ metadata:
 data:
   LLM_API_ENDPOINT: https://api.regolo.ai/v1/chat/completions
   MCP_API_ENDPOINT: http://hataraki-assistant-backend.hataraki-assistant:8000
+  JWT_ISSUER_URL: http://jwt-issuer.jwt-issuer:8000
+  JWT_ENABLED: "true"

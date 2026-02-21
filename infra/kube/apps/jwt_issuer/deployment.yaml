@@ -19,7 +19,7 @@ spec:
         - name: docker-pull-secret
       containers:
         - name: jwt-issuer
-          image: harbor.hatarakiassistant.com/docker/jwt_issuer:0.1.0
+          image: harbor.hatarakiassistant.com/docker/jwt_issuer:0.2.0
           ports:
             - containerPort: 8000
           env:

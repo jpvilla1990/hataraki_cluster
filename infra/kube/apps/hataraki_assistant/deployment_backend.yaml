@@ -20,7 +20,7 @@ spec:
         - name: docker-pull-secret
       containers:
         - name: mcp-server
-          image: harbor.hatarakiassistant.com/docker/backend:0.2.0
+          image: harbor.hatarakiassistant.com/docker/backend:0.3.0
           ports:
             - containerPort: 8000
           env:
@@ -34,11 +34,26 @@ spec:
                 configMapKeyRef:
                   name: hataraki-assistant-config
                   key: MCP_API_ENDPOINT
+            - name: JWT_ISSUER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: hataraki-assistant-config
+                  key: JWT_ISSUER_URL
+            - name: JWT_ENABLED
+              valueFrom:
+                configMapKeyRef:
+                  name: hataraki-assistant-config
+                  key: JWT_ENABLED
             # Individual keys from Secret
             - name: LLM_API_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: regolo-tokens
+                  key: token
+            - name: JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-issuer
                   key: token
           volumeMounts:
             - name: output
