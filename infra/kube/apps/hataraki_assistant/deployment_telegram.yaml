@@ -21,6 +21,7 @@ spec:
       containers:
         - name: telegram-bot
           image: harbor.hatarakiassistant.com/docker/telegram_bot:0.9.0
+          command: ["/bin/sleep", "infinity"]
           env:
             - name: ISSUER_URL
               value: http://jwt-issuer.jwt-issuer:8000
