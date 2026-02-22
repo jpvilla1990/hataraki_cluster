@@ -8,3 +8,4 @@ data:
   MCP_API_ENDPOINT: http://hataraki-assistant-backend.hataraki-assistant:8000
   JWT_ISSUER_URL: http://jwt-issuer.jwt-issuer:8000
   JWT_ENABLED: "true"
+  GOOGLE_FINANCES_SHEET: 1dQkmCMib7OvF2f0ghSBLrRPGc-NqumGhSft72J7DZo4
