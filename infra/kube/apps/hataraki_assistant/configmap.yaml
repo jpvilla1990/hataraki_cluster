@@ -9,3 +9,4 @@ data:
   JWT_ISSUER_URL: http://jwt-issuer.jwt-issuer:8000
   JWT_ENABLED: "true"
   GOOGLE_FINANCES_SHEET: 1dQkmCMib7OvF2f0ghSBLrRPGc-NqumGhSft72J7DZo4
+  MAIN_AGENT_MODEL: "qwen3.5-9b"
