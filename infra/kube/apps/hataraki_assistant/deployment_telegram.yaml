@@ -29,11 +29,6 @@ spec:
                 configMapKeyRef:
                   name: hataraki-assistant-config
                   key: LLM_API_ENDPOINT
-            - name: MAIN_AGENT_MODEL
-              valueFrom:
-                configMapKeyRef:
-                  name: hataraki-assistant-config
-                  key: MAIN_AGENT_MODEL
             - name: MCP_API_ENDPOINT
               valueFrom:
                 configMapKeyRef:
