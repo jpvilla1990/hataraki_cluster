@@ -1,0 +1,31 @@
+# frps-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frps
+  namespace: phd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frps
+  template:
+    metadata:
+      labels:
+        app: frps
+    spec:
+      containers:
+      - name: frps
+        image: snowdreamtech/frps:latest
+        ports:
+        - containerPort: 7000   # tunnel control port
+        - containerPort: 8080   # exposed IDE port
+        volumeMounts:
+        - name: config
+          mountPath: /etc/frp/frps.toml
+          subPath: frps.toml
+          readOnly: true
+      volumes:
+      - name: config
+        secret:
+          secretName: frps-config
