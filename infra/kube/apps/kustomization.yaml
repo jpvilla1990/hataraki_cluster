@@ -4,4 +4,3 @@ resources:
   - test_app
   - hataraki_assistant
   - jwt_issuer
-  - phd_ide
