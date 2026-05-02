@@ -3,9 +3,6 @@ kind: Gateway
 metadata:
   name: traefik-gateway
   namespace: traefik
-  labels:
-    app.kubernetes.io/instance: traefik-traefik
-    app.kubernetes.io/name: traefik
 spec:
   gatewayClassName: traefik
   listeners:
@@ -24,6 +21,12 @@ spec:
           - kind: Secret
             name: tls-secret
             namespace: traefik
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: ssh
+      port: 2222
+      protocol: TCP
       allowedRoutes:
         namespaces:
           from: All
