@@ -25,7 +25,7 @@ spec:
             - |
               mkdir -p /config/.ssh && chmod 700 /config/.ssh &&
               echo "${AUTH_PUBLIC_KEY}" >> /config/.ssh/authorized_keys &&
-              exec /init &
+              exec /init
           ports:
             - containerPort: 2222
           env:
