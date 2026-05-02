@@ -27,3 +27,9 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
+    - name: ssh
+      port: 2222
+      protocol: TCP
+      allowedRoutes:
+        namespaces:
+          from: All

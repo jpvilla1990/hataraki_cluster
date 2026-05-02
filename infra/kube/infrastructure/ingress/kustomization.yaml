@@ -29,3 +29,12 @@ patches:
           allowedRoutes:
             namespaces:
               from: All
+      - op: add
+        path: /spec/listeners/-
+        value:
+          name: ssh
+          port: 2222
+          protocol: TCP
+          allowedRoutes:
+            namespaces:
+              from: All

@@ -10,6 +10,7 @@ spec:
     - vault.hatarakiassistant.com
     - keycloak.hatarakiassistant.com
     - harbor.hatarakiassistant.com
+    - tunnel.hatarakiassistant.com
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
