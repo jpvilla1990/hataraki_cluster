@@ -19,7 +19,6 @@ spec:
       containers:
         - name: tunnel
           image: linuxserver/openssh-server:latest
-          command: ["/bin/bash", "-c"]
           command:
             - /bin/bash
             - -c
