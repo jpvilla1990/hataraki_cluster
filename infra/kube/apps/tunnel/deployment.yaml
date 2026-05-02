@@ -20,7 +20,9 @@ spec:
         - name: tunnel
           image: linuxserver/openssh-server:latest
           command: ["/bin/bash", "-c"]
-          args:
+          command:
+            - /bin/bash
+            - -c
             - |
               echo "${AUTH_PUBLIC_KEY}" >> /config/.ssh/authorized_keys
               exec /init
