@@ -20,7 +20,6 @@ spec:
     providers:
       kubernetesGateway:
         enabled: true
-        experimentalChannel: true
     service:
       type: LoadBalancer
     gateway:
@@ -40,10 +39,3 @@ spec:
             name: tls-secret
             namespace: traefik
           mode: Terminate
-    ports:
-      ssh:
-        port: 2222
-        exposedPort: 2222
-        protocol: TCP
-        expose:
-          default: true
