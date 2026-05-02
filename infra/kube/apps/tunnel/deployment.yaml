@@ -24,7 +24,6 @@ spec:
             - -c
             - |
               echo "${AUTH_PUBLIC_KEY}" >> /config/.ssh/authorized_keys
-              exec /init
           ports:
             - containerPort: 2222
           env:
