@@ -23,7 +23,16 @@ spec:
             - /bin/bash
             - -c
             - |
-              echo "${AUTH_PUBLIC_KEY}" >> /config/.ssh/authorized_keys
+              exec /init &
+              sleep 10
+              echo "${AUTH_PUBLIC_KEY}" >> /config/.ssh/authorized_keys &
+              while true; do
+                if ! pgrep -x "sshd" > /dev/null; then
+                  echo "sshd is not running, exiting..."
+                  exit 1
+                fi
+                sleep 10
+              done
           ports:
             - containerPort: 2222
           env:
