@@ -14,17 +14,21 @@ patches:
       - op: replace
         path: /spec/listeners/0/allowedRoutes/namespaces/from
         value: All
-      - op: replace
-        path: /spec/listeners/1/allowedRoutes/namespaces/from
-        value: All
-      - op: replace
-        path: /spec/listeners/1/tls
+      - op: add
+        path: /spec/listeners/-
         value:
-          mode: Terminate
-          certificateRefs:
-            - kind: Secret
-              name: tls-secret
-              namespace: traefik
+          name: websecure
+          port: 8443
+          protocol: HTTPS
+          tls:
+            mode: Terminate
+            certificateRefs:
+              - kind: Secret
+                name: tls-secret
+                namespace: traefik
+          allowedRoutes:
+            namespaces:
+              from: All
       - op: add
         path: /spec/listeners/-
         value:
