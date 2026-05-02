@@ -1,0 +1,14 @@
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TCPRoute
+metadata:
+  name: ssh-route
+  namespace: tunnel
+spec:
+  parentRefs:
+    - name: traefik-gateway
+      namespace: traefik
+      sectionName: ssh
+  rules:
+    - backendRefs:
+        - name: tunnel-service
+          port: 2222
