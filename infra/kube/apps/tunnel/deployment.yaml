@@ -50,7 +50,7 @@ spec:
                   key: auth_public_keys
           volumeMounts:
             - name: sshd-config
-              mountPath: /config/ssh/sshd_config
+              mountPath: /config/sshd/sshd_config
               subPath: sshd_config
       volumes:
         - name: sshd-config
