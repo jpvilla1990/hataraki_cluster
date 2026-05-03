@@ -24,11 +24,11 @@ spec:
             - -c
             - |
               mkdir -p /config/.ssh && chmod 700 /config/.ssh &&
+              cp /tmp/sshd_config/sshd_config /config/sshd/sshd_config &&
               echo "${AUTH_PUBLIC_KEYS}" >> /config/.ssh/authorized_keys &&
               exec /init
           ports:
             - containerPort: 2222
-            - containerPort: 2223
           env:
             - name: PUID
               value: "1000"
@@ -50,7 +50,7 @@ spec:
                   key: auth_public_keys
           volumeMounts:
             - name: sshd-config
-              mountPath: /config/sshd/sshd_config
+              mountPath: /tmp/sshd_config
               subPath: sshd_config
       volumes:
         - name: sshd-config
