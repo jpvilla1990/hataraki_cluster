@@ -7,5 +7,9 @@ spec:
   selector:
     app: tunnel-service
   ports:
-    - port: 2222
+    - name: ssh
+      port: 2222
       targetPort: 2222
+    - name: reverse-tunnel
+      port: 2223
+      targetPort: 2223

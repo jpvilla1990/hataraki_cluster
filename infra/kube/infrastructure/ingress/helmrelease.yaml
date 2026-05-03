@@ -30,5 +30,11 @@ spec:
           default: true
         exposedPort: 2222
         protocol: TCP
+      ssh-reverse-tunnel:
+        port: 2223
+        expose:
+          default: true
+        exposedPort: 2223
+        protocol: TCP
     gateway:
       enabled: false

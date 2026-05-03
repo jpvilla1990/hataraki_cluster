@@ -30,3 +30,9 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
+    - name: ssh-reverse-tunnel
+      port: 2223
+      protocol: TCP
+      allowedRoutes:
+        namespaces:
+          from: All
