@@ -24,7 +24,7 @@ spec:
             - -c
             - |
               mkdir -p /config/.ssh && chmod 700 /config/.ssh &&
-              rm -rf /config/sshd/sshd_config &&
+              mkdir -p /config/sshd &&
               cp /tmp/sshd_config /config/sshd/sshd_config &&
               echo "${AUTH_PUBLIC_KEYS}" >> /config/.ssh/authorized_keys &&
               exec /init
