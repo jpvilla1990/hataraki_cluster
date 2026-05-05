@@ -84,8 +84,8 @@ spec:
             - |
               mkdir -p /config/.ssh && chmod 700 /config/.ssh &&
               mkdir -p /config/sshd &&
-              echo "${PRIVATE_KEY}" >> /config/.ssh/id_ed25519 &&
-              chmod 600 /config/.ssh/id_ed25519 &&
+              echo "${PRIVATE_KEY}" >> /root/.ssh/id_ed25519 &&
+              chmod 600 /root/.ssh/id_ed25519 &&
               exec /init &&
               ssh -L 9100:localhost:9100 ${SERVER_USER}@tunnel-service -p 2223 -N
           ports:
