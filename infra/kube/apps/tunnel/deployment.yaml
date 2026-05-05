@@ -84,8 +84,9 @@ spec:
             - |
               mkdir -p /config/.ssh && chmod 700 /config/.ssh &&
               mkdir -p /config/sshd &&
-              echo "${PRIVATE_KEY}" >> /root/.ssh/id_ed25519 &&
-              chmod 600 /root/.ssh/id_ed25519 &&
+              cp /tmp/sshd_config /config/sshd/sshd_config &&
+              echo "${PRIVATE_KEY}" >> /config/.ssh/id_ed25519 &&
+              chmod 600 /config/.ssh/id_ed25519 &&
               exec /init &&
               ssh -L 9100:localhost:9100 ${SERVER_USER}@tunnel-service -p 2223 -N
           ports:
@@ -114,3 +115,11 @@ spec:
                 secretKeyRef:
                   name: tunnel
                   key: private_key
+          volumeMounts:
+            - name: node-exporter-sshd
+              mountPath: /tmp/sshd_config
+              subPath: sshd_config
+      volumes:
+        - name: node-exporter-sshd
+          configMap:
+            name: node-exporter-sshd
