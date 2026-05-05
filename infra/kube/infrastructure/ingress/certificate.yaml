@@ -11,6 +11,7 @@ spec:
     - keycloak.hatarakiassistant.com
     - harbor.hatarakiassistant.com
     - tunnel.hatarakiassistant.com
+    - monitoring.hatarakiassistant.com
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
