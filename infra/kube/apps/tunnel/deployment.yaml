@@ -87,7 +87,7 @@ spec:
               cp /tmp/sshd_config /config/sshd/sshd_config &&
               echo "${PRIVATE_KEY}" >> /config/.ssh/id_ed25519 &&
               chmod 600 /config/.ssh/id_ed25519 &&
-              exec /init &&
+              /init &&
               ssh -i /config/.ssh/id_ed25519 -o StrictHostKeyChecking=no \
                 -L 9100:localhost:9100 \
                 ${SERVER_USER}@tunnel-service -p 2223 -N
