@@ -13,18 +13,3 @@ data:
     PermitOpen any
     PubkeyAuthentication yes
     AuthorizedKeysFile /config/.ssh/authorized_keys
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: node-exporter-sshd
-  namespace: tunnel
-data:
-  sshd_config: |
-    Port 2222
-    GatewayPorts yes
-    PasswordAuthentication yes
-    AllowTcpForwarding yes
-    PermitOpen any
-    PubkeyAuthentication yes
-    AuthorizedKeysFile /config/.ssh/authorized_keys
