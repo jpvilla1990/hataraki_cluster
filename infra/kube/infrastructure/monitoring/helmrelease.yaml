@@ -42,6 +42,11 @@ spec:
                   - tunnel-node-exporter-service.tunnel:9100
     grafana:
       enabled: true
+      dashboards:
+        default:
+          node-exporter-full:
+            url: https://grafana.com/api/dashboards/1860/revisions/45/download
+            datasource: Prometheus
       admin:
         existingSecret: grafana-admin-secret
         userKey: admin-user
