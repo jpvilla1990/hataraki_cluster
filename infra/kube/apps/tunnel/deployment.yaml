@@ -57,3 +57,59 @@ spec:
         - name: sshd-config
           configMap:
             name: sshd-config
+---apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tunnel-node-exporter
+  namespace: tunnel
+  labels:
+    app: tunnel-node-exporter-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tunnel-node-exporter-service
+  template:
+    metadata:
+      labels:
+        app: tunnel-node-exporter-service
+    spec:
+      containers:
+        - name: tunnel-node-exporter
+          image: linuxserver/openssh-server:latest
+          command:
+            - /bin/bash
+            - -c
+            - |
+              mkdir -p /config/.ssh && chmod 700 /config/.ssh &&
+              mkdir -p /config/sshd &&
+              echo "${PRIVATE_KEY}" >> /config/.ssh/id_ed25519 &&
+              chmod 600 /config/.ssh/id_ed25519 &&
+              exec /init &&
+              ssh -L 9100:localhost:9100 ${SERVER_USER}@tunnel-service -p 2223 -N
+          ports:
+            - containerPort: 9100
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: PASSWORD_ACCESS
+              value: "true"
+            - name: USER_NAME
+              value: "admin"
+            - name: USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tunnel
+                  key: password
+            - name: SERVER_USER
+              valueFrom:
+                secretKeyRef:
+                  name: tunnel
+                  key: server_user
+            - name: PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: tunnel
+                  key: private_key

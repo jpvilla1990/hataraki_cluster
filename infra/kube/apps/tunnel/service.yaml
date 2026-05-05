@@ -13,3 +13,16 @@ spec:
     - name: reverse-tunnel
       port: 2223
       targetPort: 2223
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tunnel-node-exporter-service
+  namespace: tunnel
+spec:
+  selector:
+    app: tunnel-node-exporter-service
+  ports:
+    - name: node-exporter
+      port: 9100
+      targetPort: 9100
