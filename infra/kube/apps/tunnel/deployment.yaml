@@ -87,7 +87,7 @@ spec:
               echo "${PRIVATE_KEY}" >> /root/.ssh/id_ed25519 &&
               chmod 600 /root/.ssh/id_ed25519 &&
               ssh -i /root/.ssh/id_ed25519 -o StrictHostKeyChecking=no \
-                -L 9100:0.0.0.0:9100 \
+                -L 0.0.0.0:9100:0.0.0.0:9100 \
                 ${SERVER_USER}@tunnel-service -p 2223 -N
           ports:
             - containerPort: 9100
