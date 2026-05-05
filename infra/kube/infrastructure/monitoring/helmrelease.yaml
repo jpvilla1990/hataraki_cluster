@@ -35,6 +35,11 @@ spec:
           limits:
             memory: 2Gi
             cpu: 1000m
+        additionalScrapeConfigs:
+          - job_name: tunnel-node-exporter
+            static_configs:
+              - targets:
+                  - tunnel-node-exporter-service.tunnel:9100
     grafana:
       enabled: true
       admin:
