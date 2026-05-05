@@ -21,13 +21,13 @@ spec:
       prometheusSpec:
         retention: 15d
         storageSpec:
-        volumeClaimTemplate:
-          spec:
-            storageClassName: local-path    # add this
-            accessModes: ["ReadWriteOnce"]
-            resources:
-              requests:
-                storage: 10Gi
+          volumeClaimTemplate:
+            spec:
+              storageClassName: local-path    # add this
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 10Gi
         resources:
           requests:
             memory: 512Mi
