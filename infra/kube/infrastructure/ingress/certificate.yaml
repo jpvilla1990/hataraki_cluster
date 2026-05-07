@@ -12,6 +12,7 @@ spec:
     - harbor.hatarakiassistant.com
     - tunnel.hatarakiassistant.com
     - monitoring.hatarakiassistant.com
+    - caregiver.hatarakiassistant.com
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer

@@ -1,0 +1,69 @@
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: caregiver
+  namespace: caregiver
+  labels:
+    app: caregiver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: caregiver
+  template:
+    metadata:
+      labels:
+        app: caregiver
+    spec:
+      imagePullSecrets:
+        - name: docker-pull-secret
+      containers:
+        - name: caregiver
+          image: harbor.hatarakiassistant.com/docker/caregiver:0.1.0
+          ports:
+            - containerPort: 8000
+          env:
+            - name: APP_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: caregiver
+                  key: APP_URL
+            - name: SHEET_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: caregiver
+                  key: SHEET_NAME
+            - name: ALLOWED_EMAILS_STR
+              valueFrom:
+                configMapKeyRef:
+                  name: caregiver
+                  key: ALLOWED_EMAILS_STR
+            - name: GOOGLE_SHEET_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: caregiver
+                  key: GOOGLE_SHEET_ID
+            # Individual keys from Secret
+            - name: GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: caregiver
+                  key: client_secret
+            - name: GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: caregiver
+                  key: client_id
+            - name: GOOGLE_JSON_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: caregiver
+                  key: json
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"

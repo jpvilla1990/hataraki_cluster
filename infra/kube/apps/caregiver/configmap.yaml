@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: caregiver
+  namespace: caregiver
+data:
+  APP_URL: https://caregiver.hatarakiassistant.com
+  SHEET_NAME: records
+  ALLOWED_EMAILS_STR: jpvilla1990@gmail.com
+  GOOGLE_SHEET_ID: 1r1fEf0DVP1t1o7OluA7s6J3JQp0gLxaiuZewXjAhBaI
