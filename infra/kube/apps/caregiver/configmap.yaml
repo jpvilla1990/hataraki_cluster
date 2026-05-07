@@ -6,5 +6,5 @@ metadata:
 data:
   APP_URL: https://caregiver.hatarakiassistant.com
   SHEET_NAME: records
-  ALLOWED_EMAILS_STR: jpvilla1990@gmail.com
+  ALLOWED_EMAILS_STR: jpvilla1990@gmail.com,jpvilla1990@proton.me
   GOOGLE_SHEET_ID: 1r1fEf0DVP1t1o7OluA7s6J3JQp0gLxaiuZewXjAhBaI
