@@ -20,7 +20,7 @@ spec:
         - name: docker-pull-secret
       containers:
         - name: mcp-server
-          image: harbor.hatarakiassistant.com/docker/backend:0.4.0
+          image: harbor.hatarakiassistant.com/docker/backend:0.5.0
           ports:
             - containerPort: 8000
           env:
