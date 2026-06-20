@@ -20,7 +20,7 @@ spec:
         - name: docker-pull-secret
       containers:
         - name: telegram-bot
-          image: harbor.hatarakiassistant.com/docker/telegram_bot:0.11.0
+          image: harbor.hatarakiassistant.com/docker/telegram_bot:0.12.0
           env:
             - name: ISSUER_URL
               value: http://jwt-issuer.jwt-issuer:8000
