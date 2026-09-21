@@ -1,5 +1,87 @@
 # hataraki_cluster
 
+## Architecture
+
+![Talos Atchitecture](bastion_plus_private_talos_node.svg)
+
+## Install Bastion
+
+In bastion server
+```bash
+# Install talosctl
+curl -sL https://talos.dev/install | sh
+
+# Install kubectl
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+
+chmod +x kubectl
+mkdir -p ~/.local/bin
+mv ./kubectl ~/.local/bin/kubectl
+export PATH="$HOME/.local/bin:$PATH"
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+```
+
+In talos servers
+```bash
+# Extract IP and Gateway
+ip address
+ip route | grep default
+
+# Flash Talos Image
+lsblk
+
+curl -fL -o metal-amd64.raw.xz https://factory.talos.dev/image/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba/v1.14.1/metal-amd64.raw.xz
+
+xz -t metal-amd64.raw.xz
+xz -d metal-amd64.raw.xz
+
+dd if=metal-amd64.raw of=/dev/sda bs=4M status=progress conv=fsync
+# Manually reboot from Contabo
+```
+Manually using the UI and VNC, configure the same plublic IP and gateway as Contabo assigned originally
+
+Botstrap from Bastion to first control plane
+```bash
+CLUSTER_NAME=name
+CONTROL_PLANE_IP=controlplane_ip
+# Get disks from talos server
+talosctl get disks --insecure --nodes $CONTROL_PLANE_IP
+DISK_NAME=capture_disk_with_more_space
+
+# Create cluster, do it only with one control plane
+talosctl gen config $CLUSTER_NAME https://$CONTROL_PLANE_IP:6443 --install-disk /dev/$DISK_NAME
+
+# Apply cluster config to each control plane
+talosctl apply-config --insecure --nodes $CONTROL_PLANE_IP --file controlplane.yaml
+
+# Apply work config to each worker
+talosctl apply-config --insecure --nodes "$WORKER_IP" --file worker.yaml
+
+# Set endpoints
+talosctl --talosconfig=.talos/talosconfig config endpoints $CONTROL_PLANE_IP
+
+# Bootstrap etcd
+talosctl bootstrap --nodes $CONTROL_PLANE_IP --talosconfig=.talos/talosconfig
+
+# Get kubeconfig
+talosctl kubeconfig --nodes $CONTROL_PLANE_IP --talosconfig=.talos/talosconfig
+
+# Store kubeconfig
+cat ~/.kube/config
+
+# Allows pod scheduling in control planes if needed
+kubectl taint nodes $CONTROL_PLANE_NODES node-role.kubernetes.io/control-plane:NoSchedule-
+```
+
+Bootstrap kubernetes
+```bash
+kubectl kustomize infra/kube/talos_infrastructure/bootstrap/01-flux-operator --enable-helm | kubectl apply -f -
+kubectl kustomize infra/kube/talos_infrastructure/bootstrap/02-flux-instance --enable-helm | kubectl apply -f -
+```
+
+It generates files in:
+`Created /home/bastion/controlplane.yaml, Created /home/bastion/worker.yaml, Created /home/bastion/talosconfig`
+
 ## Setup Instructions
 
 Populate `infra/ansible/inventories/prod/hosts.yaml` file, then roll out cluster with ansible
