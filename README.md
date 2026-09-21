@@ -19,6 +19,9 @@ mkdir -p ~/.local/bin
 mv ./kubectl ~/.local/bin/kubectl
 export PATH="$HOME/.local/bin:$PATH"
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+
+# Install flux
+curl -s https://fluxcd.io/install.sh | sudo bash
 ```
 
 In talos servers
@@ -76,7 +79,8 @@ kubectl taint nodes $CONTROL_PLANE_NODES node-role.kubernetes.io/control-plane:N
 Bootstrap kubernetes
 ```bash
 kubectl kustomize infra/kube/talos_infrastructure/bootstrap/01-flux-operator --enable-helm | kubectl apply -f -
-kubectl kustomize infra/kube/talos_infrastructure/bootstrap/02-flux-instance --enable-helm | kubectl apply -f -
+kubectl kustomize infra/kube/talos_infrastructure/bootstrap/02-flux-instance | kubectl apply -f -
+kubectl kustomize infra/kube/talos_infrastructure/bootstrap/03-gitops | kubectl apply -f -
 ```
 
 It generates files in:

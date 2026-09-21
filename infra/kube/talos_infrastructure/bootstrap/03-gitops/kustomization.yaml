@@ -11,3 +11,6 @@ secretGenerator:
     files:
       - identity=private.key
       - known_hosts=known-hosts.txt
+
+generatorOptions:
+  disableNameSuffixHash: true
