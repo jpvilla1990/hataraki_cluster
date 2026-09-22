@@ -3,16 +3,5 @@ kind: Kustomization
 
 resources:
   - namespace.yaml
-
-helmCharts:
-  - name: longhorn
-    repo: https://charts.longhorn.io
-    version: 1.12.1
-    releaseName: longhorn
-    namespace: longhorn-system
-    includeCRDs: true
-    valuesInline:
-      defaultSettings:
-        defaultDataPath: /var/lib/longhorn
-      persistence:
-        defaultClassReplicaCount: 3
+  - helmrepository.yaml
+  - helmrelease.yaml
