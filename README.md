@@ -86,6 +86,14 @@ kubectl kustomize infra/kube/talos_infrastructure/bootstrap/03-gitops | kubectl 
 It generates files in:
 `Created /home/bastion/controlplane.yaml, Created /home/bastion/worker.yaml, Created /home/bastion/talosconfig`
 
+## Storage CSI
+
+```bash
+kubectl -n longhorn-system port-forward svc/longhorn-frontend 8080:80
+```
+
+This command enables dashboard monitoring on the distributed storages.
+
 ## Setup Instructions
 
 Populate `infra/ansible/inventories/prod/hosts.yaml` file, then roll out cluster with ansible
