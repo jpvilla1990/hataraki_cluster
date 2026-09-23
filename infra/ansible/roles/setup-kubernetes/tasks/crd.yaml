@@ -17,7 +17,3 @@
 - name: Apply Gateway API CRDs
   command: kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/standard-install.yaml 
   when: gatewayapi_check.rc != 0
-
-- name: Apply Gateway API Experimental CRDs
-  command: kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/experimental-install.yaml
-  when: gatewayapi_check.rc != 0
