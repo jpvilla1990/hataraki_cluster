@@ -20,6 +20,9 @@ spec:
     deployment:
       kind: DaemonSet
     hostNetwork: true
+    updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
     dnsPolicy: ClusterFirstWithHostNet
     providers:
       kubernetesGateway:
