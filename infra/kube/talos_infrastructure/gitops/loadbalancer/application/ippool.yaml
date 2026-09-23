@@ -1,11 +1,18 @@
-apiVersion: cilium.io/v2alpha1
-kind: CiliumLoadBalancerIPPool
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
 metadata:
   name: public-pool
-  namespace: cilium
+  namespace: metallb-system
 spec:
-  blocks:
-    - start: 89.116.24.207
-      stop: 89.116.24.207
-    - start: 217.76.61.191
-      stop: 217.76.61.191
+  addresses:
+    - 89.116.24.207/32
+    - 217.76.61.191/32
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: public-pool
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+    - public-pool

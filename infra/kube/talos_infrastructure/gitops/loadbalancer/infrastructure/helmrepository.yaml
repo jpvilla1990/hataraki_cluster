@@ -1,8 +1,8 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: cilium
-  namespace: cilium
+  name: metallb
+  namespace: metallb-system
 spec:
   interval: 1h
-  url: https://helm.cilium.io/
+  url: https://metallb.github.io/metallb
