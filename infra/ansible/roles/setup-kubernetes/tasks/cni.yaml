@@ -67,7 +67,7 @@
     --set loadBalancer.mode=dsr
   when: cilium_status.rc != 0
 
-- name: Create Cillium LoadBalancer IP Pool
+- name: Create cilium LoadBalancer IP Pool
   shell: |
     kubectl apply -f - <<'EOF'
     apiVersion: cilium.io/v2alpha1
