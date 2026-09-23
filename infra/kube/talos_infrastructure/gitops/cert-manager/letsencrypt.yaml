@@ -15,4 +15,4 @@ spec:
             parentRefs:
               - name: traefik-gateway
                 namespace: traefik
-                sectionName: acme-http
+                sectionName: web
