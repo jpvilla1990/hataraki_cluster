@@ -17,6 +17,10 @@ spec:
   install:
     createNamespace: true
   values:
+    deployment:
+      kind: DaemonSet
+    hostNetwork: true
+    dnsPolicy: ClusterFirstWithHostNet
     providers:
       kubernetesGateway:
         enabled: true
