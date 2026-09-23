@@ -1,0 +1,10 @@
+apiVersion: cilium.io/v2alpha1
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: public-pool
+spec:
+  blocks:
+    - start: 89.116.24.207
+      stop: 89.116.24.207
+    - start: 217.76.61.191
+      stop: 217.76.61.191
