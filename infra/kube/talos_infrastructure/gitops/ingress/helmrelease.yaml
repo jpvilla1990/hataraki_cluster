@@ -24,6 +24,12 @@ spec:
     service:
       type: LoadBalancer
     ports:
+      acmehttp:
+        port: 80
+        expose:
+          default: true
+        exposedPort: 80
+        protocol: TCP
       ssh:
         port: 2222
         expose:
