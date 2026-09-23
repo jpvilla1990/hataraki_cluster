@@ -3,4 +3,5 @@ kind: Kustomization
 
 resources:
   - ippool.yaml
+  - namespace.yaml
   - https://raw.githubusercontent.com/cilium/cilium/v1.18.6/install/kubernetes/cilium-crds.yaml
