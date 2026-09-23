@@ -2,7 +2,7 @@ apiVersion: cilium.io/v2alpha1
 kind: CiliumLoadBalancerIPPool
 metadata:
   name: public-pool
-  namespace: traefik
+  namespace: cillium
 spec:
   blocks:
     - start: 89.116.24.207
