@@ -25,10 +25,7 @@ spec:
 
   values:
     ipam:
-      operator:
-        clusterPoolIPv4PodCIDRList:
-          - 192.168.0.0/16
-
+      mode: kubernetes
     ipv4NativeRoutingCIDR: "10.0.0.0/8"
 
     loadBalancer:
