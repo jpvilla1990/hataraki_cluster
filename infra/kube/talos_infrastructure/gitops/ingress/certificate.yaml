@@ -6,6 +6,7 @@ metadata:
 spec:
   secretName: tls-secret
   dnsNames:
+    - keycloak.hatarakiassistant.com
     - vault.hatarakiassistant.com
   issuerRef:
     name: letsencrypt-prod
