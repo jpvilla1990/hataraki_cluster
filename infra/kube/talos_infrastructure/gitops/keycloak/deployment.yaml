@@ -13,6 +13,8 @@ spec:
       labels:
         app: keycloak
     spec:
+      securityContext:
+        fsGroup: 1000
       containers:
       - name: keycloak
         image: quay.io/keycloak/keycloak:26.5.2
@@ -27,6 +29,8 @@ spec:
           value: admin
         - name: KC_BOOTSTRAP_ADMIN_PASSWORD
           value: admin
+        - name: KC_PROXY_HEADERS
+          value: "xforwarded"
         - name: JAVA_OPTS_APPEND
           value: "-Djava.net.preferIPv4Stack=true"
         ports:
