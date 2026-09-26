@@ -5,9 +5,4 @@ resources:
   - helmrepository.yaml
   - helmrelease.yaml
   - externalsecret.yaml
-  - cronjob_redis_backup.yaml
-  - cronjob_trivy_backup.yaml
-  - cronjob_database_backup.yaml
-  - cronjob_jobservice_backup.yaml
-  - cronjob_registry_backup.yaml
   - serviceaccount.yaml
