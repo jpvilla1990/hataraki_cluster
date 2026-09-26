@@ -7,6 +7,7 @@ resources:
   - keycloak
   - ingress
   - loadbalancer
+  - monitoring
   - kube-metrics
   - storage
   - vault
