@@ -1,8 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - test_app
   - hataraki_assistant
   - jwt_issuer
   - tunnel
-  # - caregiver
+  #- caregives
