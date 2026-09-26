@@ -6,4 +6,13 @@ resources:
   - helmrelease.yaml
   - certificate.yaml
   - gateway.yaml
-  #- https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/experimental-install.yaml
+  - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/experimental-install.yaml
+
+patches:
+  - target:
+      kind: CustomResourceDefinition
+      name: backendtlspolicies.gateway.networking.k8s.io
+    patch: |-
+      - op: add
+        path: /metadata/annotations/kustomize.toolkit.fluxcd.io~1force
+        value: enabled
