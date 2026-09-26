@@ -9,3 +9,4 @@ resources:
   - loadbalancer
   - kube-metrics
   - storage
+  - vault
