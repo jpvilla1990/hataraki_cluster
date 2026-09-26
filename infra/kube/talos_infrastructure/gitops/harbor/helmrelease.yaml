@@ -33,13 +33,13 @@ spec:
     persistence:
       persistentVolumeClaim:
         registry:
-          storageClass: "longhorn-retain"
+          storageClass: longhorn-retain
         jobservice:
           jobLog:
-            storageClass: "longhorn-retain"
+            storageClass: longhorn-retain
         database:
-          storageClass: "longhorn-retain"
+          storageClass: longhorn-retain
         trivy:
-          storageClass: "longhorn-retain"
+          storageClass: longhorn-retain
         redis:
-          storageClass: "longhorn-retain"
+          storageClass: longhorn-retain

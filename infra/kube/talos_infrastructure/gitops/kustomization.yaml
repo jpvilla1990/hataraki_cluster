@@ -5,6 +5,7 @@ resources:
   - cert-manager
   - external-secrets
   - keycloak
+  - harbor
   - ingress
   - loadbalancer
   - monitoring
