@@ -20,4 +20,4 @@ spec:
     server:
       dataStorage:
         enabled: true
-        storageClass: "local-path"
+        storageClass: "longhorn-retain"
