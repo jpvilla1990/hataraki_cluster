@@ -6,6 +6,7 @@ metadata:
 spec:
   secretName: tls-secret
   dnsNames:
+    - harbor.hatarakiassistant.com
     - keycloak.hatarakiassistant.com
     - monitoring.hatarakiassistant.com
     - vault.hatarakiassistant.com
