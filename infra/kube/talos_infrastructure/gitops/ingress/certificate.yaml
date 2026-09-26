@@ -9,6 +9,7 @@ spec:
     - harbor.hatarakiassistant.com
     - keycloak.hatarakiassistant.com
     - monitoring.hatarakiassistant.com
+    - tunnel.hatarakiassistant.com
     - vault.hatarakiassistant.com
   issuerRef:
     name: letsencrypt-prod
