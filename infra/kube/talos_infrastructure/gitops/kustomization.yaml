@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - cert-manager
   - external-secrets
+  - keycloak
   - ingress
   - loadbalancer
   - kube-metrics

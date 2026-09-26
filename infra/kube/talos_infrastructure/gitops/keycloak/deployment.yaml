@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+  namespace: keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+      - name: keycloak
+        image: quay.io/keycloak/keycloak:26.5.2
+        command:
+        - /opt/keycloak/bin/kc.sh
+        args:
+          - start-dev
+          - --hostname
+          - https://keycloak.hatarakiassistant.com
+        env:
+        - name: KC_BOOTSTRAP_ADMIN_USERNAME
+          value: admin
+        - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+          value: admin
+        - name: JAVA_OPTS_APPEND
+          value: "-Djava.net.preferIPv4Stack=true"
+        ports:
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+        - name: keycloak-data
+          mountPath: /opt/keycloak/data
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+          limits:
+            cpu: 750m
+            memory: 768Mi
+      volumes:
+      - persistentVolumeClaim:
+          claimName: keycloak
+        name: keycloak-data
