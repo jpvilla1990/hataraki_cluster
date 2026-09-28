@@ -1,9 +1,0 @@
-- name: Check if local-path StorageClass exists
-  command: kubectl get storageclass local-path
-  register: local_path_sc
-  failed_when: false
-  changed_when: false
-
-- name: Apply local path provisioner
-  command: kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/master/deploy/local-path-storage.yaml
-  when: local_path_sc.rc != 0

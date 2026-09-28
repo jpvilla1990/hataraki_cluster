@@ -195,29 +195,10 @@ vault write auth/kubernetes/role/external-secrets-role \
   ttl=24h
 ```
 
-## Backup
-
-Protondrive is supported to perform backup:
-- install and configure rclone:
-```bash
-curl -fsSL https://rclone.org/install.sh | sudo bash
-rclone config
-# Enter username and password
-```
-
-- Read credential files from `~/.config/rclone/rclone.conf`, and store them in vault:
-* proton_client_access_token
-* proton_client_refresh_token
-* proton_client_salted_key_pass
-* proton_client_uid
-* proton_password
-* proton_username
-
-
 ## Notes
 
 - Flux will automatically sync every 10 minutes
 - Dependencies ensure components deploy in correct order
 - cert-manager will automatically provision SSL certificates
-- Traefik will use the wildcard certificate for HTTPS
+- Traefik will use http challenge to generate certificates for HTTPS
 - All apps will automatically get certificates through the gateway

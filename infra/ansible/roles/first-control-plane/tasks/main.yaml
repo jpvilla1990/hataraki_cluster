@@ -1,2 +1,0 @@
-- name: setup first_cluster
-  include_tasks: setup_first_cluster.yaml

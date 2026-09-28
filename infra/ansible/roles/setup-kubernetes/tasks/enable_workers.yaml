@@ -1,7 +1,0 @@
-- name: Remove control-plane taint
-  command: kubectl taint nodes --all node-role.kubernetes.io/control-plane-
-  ignore_errors: yes
-    
-- name: Remove load-balancer label
-  command: kubectl label nodes --all node.kubernetes.io/exclude-from-external-load-balancers-
-  ignore_errors: yes
