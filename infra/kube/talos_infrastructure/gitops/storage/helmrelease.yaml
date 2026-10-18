@@ -16,6 +16,7 @@ spec:
   values:
     defaultSettings:
       defaultDataPath: /var/lib/longhorn
+      taintToleration: "node-role.kubernetes.io/control-plane:NoSchedule"
     persistence:
       defaultClassReplicaCount: 3
     longhornManager:
