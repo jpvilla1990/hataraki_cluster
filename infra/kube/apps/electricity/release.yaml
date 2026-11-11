@@ -15,7 +15,7 @@ metadata:
 spec:
   type: oci
   interval: 1h
-  url: oci://harbor.hatarakiassistant.com/helm/electricity-data
+  url: oci://harbor.hatarakiassistant.com/docker/electricity-data
   secretRef:
     name: harbor-creds
 ---
