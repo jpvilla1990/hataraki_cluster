@@ -1,0 +1,91 @@
+# electricityData — Flux release (HelmRepository + HelmRelease + ExternalSecrets)
+#
+# Apply order matters — Flux will reconcile in dependency order, but the
+# ExternalSecrets must exist before the HelmRelease's Pods start pulling.
+#
+#   kubectl apply -f release/release.yaml
+
+---
+# ── Chart source (Harbor) ───────────────────────────────────────────
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: electricity-data
+  namespace: electricity-data
+spec:
+  interval: 1h
+  url: oci://harbor.hatarakiassistant.com/helm/electricity-data
+  secretRef:
+    name: harbor-creds
+---
+# ── Helm release ────────────────────────────────────────────────────
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: electricity-data
+  namespace: electricity-data
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: electricity-data
+      version: 'v0.1.0'
+      sourceRef:
+        kind: HelmRepository
+        name: electricity-data
+        namespace: electricity-data
+      interval: 1m
+  install:
+    createNamespace: true
+  values:
+    # ── Global ──────────────────────────────────────────────────────
+    global:
+      registry: "harbor.hatarakiassistant.com"
+      project: "docker"
+      imagePullSecrets:
+        - name: harbor-creds
+      gateway:
+        name: traefik-gateway
+        namespace: traefik
+    # ── Namespace ───────────────────────────────────────────────────
+    namespace:
+      create: true
+      name: electricity-data
+    # ── Backend ─────────────────────────────────────────────────────
+    backend:
+      enabled: true
+      replicas: 1
+      config:
+        APP_NAME: "electricity-data-backend"
+        DEBUG: "false"
+        AUTHORIZED_EMAILS: '["jpvilla1990@gmail.com"]'
+      secrets:
+        googleClientId:
+          exist: true
+          name: electricity-data-backend-secrets
+          key: GOOGLE_CLIENT_ID
+      resources:
+        requests:
+          cpu: 100m
+          memory: 256Mi
+        limits:
+          cpu: 500m
+          memory: 512Mi
+      httpRoute:
+        enabled: true
+        host: "api-electricity.hatarakiassistant.com"
+    # ── Frontend ────────────────────────────────────────────────────
+    frontend:
+      enabled: true
+      replicas: 1
+      secrets: {}
+      resources:
+        requests:
+          cpu: 50m
+          memory: 64Mi
+        limits:
+          cpu: 200m
+          memory: 128Mi
+      httpRoute:
+        enabled: true
+        host: "electricity.hatarakiassistant.com"

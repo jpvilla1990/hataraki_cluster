@@ -4,4 +4,5 @@ resources:
   - hataraki_assistant
   - jwt_issuer
   - tunnel
+  - electricity
   #- caregives
