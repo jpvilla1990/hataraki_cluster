@@ -13,6 +13,7 @@ metadata:
   name: electricity-data
   namespace: electricity-data
 spec:
+  type: oci
   interval: 1h
   url: oci://harbor.hatarakiassistant.com/helm/electricity-data
   secretRef:
@@ -29,7 +30,7 @@ spec:
   chart:
     spec:
       chart: electricity-data
-      version: 'v0.1.0'
+      version: 'v0.2.0'
       sourceRef:
         kind: HelmRepository
         name: electricity-data
@@ -47,6 +48,7 @@ spec:
       gateway:
         name: traefik-gateway
         namespace: traefik
+      host: "electricity.hatarakiassistant.com"
     # ── Namespace ───────────────────────────────────────────────────
     namespace:
       create: true
@@ -73,7 +75,6 @@ spec:
           memory: 512Mi
       httpRoute:
         enabled: true
-        host: "api-electricity.hatarakiassistant.com"
     # ── Frontend ────────────────────────────────────────────────────
     frontend:
       enabled: true
@@ -88,4 +89,3 @@ spec:
           memory: 128Mi
       httpRoute:
         enabled: true
-        host: "electricity.hatarakiassistant.com"
