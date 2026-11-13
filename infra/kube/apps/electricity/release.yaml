@@ -60,7 +60,7 @@ spec:
       config:
         APP_NAME: "electricity-data-backend"
         DEBUG: "false"
-        AUTHORIZED_EMAILS: '["jpvilla1990@gmail.com"]'
+        AUTHORIZED_EMAILS: '["jpvilla1990@gmail.com", "jpvilla1990@proton.me"]'
       secrets:
         googleClientId:
           exist: true
