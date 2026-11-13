@@ -30,7 +30,7 @@ spec:
   chart:
     spec:
       chart: electricity-data
-      version: 'v0.5.0'
+      version: 'v0.6.0'
       sourceRef:
         kind: HelmRepository
         name: electricity-data
@@ -61,6 +61,10 @@ spec:
         APP_NAME: "electricity-data-backend"
         DEBUG: "false"
         AUTHORIZED_EMAILS: '["jpvilla1990@gmail.com", "jpvilla1990@proton.me"]'
+      persistency:
+        enabled: true
+        storageClass: longhorn-retain
+        size: 1Gi
       secrets:
         googleClientId:
           exist: true
