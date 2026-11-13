@@ -61,7 +61,7 @@ spec:
         APP_NAME: "electricity-data-backend"
         DEBUG: "false"
         AUTHORIZED_EMAILS: '["jpvilla1990@gmail.com", "jpvilla1990@proton.me"]'
-      persistency:
+      persistence:
         enabled: true
         storageClass: longhorn-retain
         size: 1Gi
