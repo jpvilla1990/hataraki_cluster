@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: n8n-oauth2-proxy-emails
+  namespace: n8n
+data:
+  emails.txt: |
+    jpvilla1990@gmail.com
+    jpvilla1990@proton.me
+    camilo.cgp@gmail.com

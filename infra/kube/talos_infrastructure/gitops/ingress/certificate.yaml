@@ -12,6 +12,7 @@ spec:
     - tunnel.hatarakiassistant.com
     - vault.hatarakiassistant.com
     - electricity.hatarakiassistant.com
+    - n8n.hatarakiassistant.com
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
