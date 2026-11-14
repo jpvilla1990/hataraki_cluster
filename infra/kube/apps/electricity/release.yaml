@@ -60,7 +60,7 @@ spec:
       config:
         APP_NAME: "electricity-data-backend"
         DEBUG: "false"
-        AUTHORIZED_EMAILS: '["jpvilla1990@gmail.com", "jpvilla1990@proton.me"]'
+        AUTHORIZED_EMAILS: '["jpvilla1990@gmail.com", "jpvilla1990@proton.me", "camilo.cgp@gmail.com"]'
       persistence:
         enabled: true
         storageClass: longhorn-retain
@@ -72,10 +72,10 @@ spec:
           key: GOOGLE_CLIENT_ID
       resources:
         requests:
-          cpu: 100m
+          cpu: 200m
           memory: 256Mi
         limits:
-          cpu: 500m
+          cpu: 1000m
           memory: 512Mi
       httpRoute:
         enabled: true
@@ -86,10 +86,10 @@ spec:
       secrets: {}
       resources:
         requests:
-          cpu: 50m
+          cpu: 100m
           memory: 64Mi
         limits:
-          cpu: 200m
+          cpu: 500m
           memory: 128Mi
       httpRoute:
         enabled: true
