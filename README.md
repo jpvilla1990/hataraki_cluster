@@ -43,7 +43,7 @@ dd if=metal-amd64.raw of=/dev/sda bs=4M status=progress conv=fsync
 ```
 Manually using the UI and VNC, configure the same plublic IP and gateway as Contabo assigned originally
 
-Botstrap from Bastion to first control plane
+Bootstrap from Bastion to first control plane
 ```bash
 CLUSTER_NAME=name
 CONTROL_PLANE_IP=controlplane_ip
