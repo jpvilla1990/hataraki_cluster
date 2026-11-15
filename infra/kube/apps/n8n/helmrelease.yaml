@@ -39,6 +39,12 @@ spec:
           value: "false"
         GENERIC_TIMEZONE:
           value: "Europe/Berlin"
+        N8N_COMMUNITY_PACKAGES_ENABLED:
+          value: "true"
+        N8N_COMMUNITY_PACKAGES_MANAGED_BY_ENV:
+          value: "true"
+        N8N_COMMUNITY_PACKAGES:
+          value: '[{"name":"n8n-nodes-regoloai"}]'
       persistence:
         enabled: true
         type: dynamic
